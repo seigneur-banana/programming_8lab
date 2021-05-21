@@ -1,0 +1,5 @@
+# Default ignored files
+target/
+fifth_lab.*
+.idea
+*.txt

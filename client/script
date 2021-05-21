@@ -1,0 +1,8 @@
+show
+add {"name":"NewGroup","Y":"100.0","x":"50.0","count":"25","transfer":"8","mark":"4","sem":"SECOND","idPerson":"0"}
+show
+update 0 {"name":"NewNewGroup","Y":"100.0","x":"50.0","count":"30","transfer":"8","mark":"4","sem":"SECOND","idPerson":"0"}
+show
+add_if_max {"name":"NewNewNewGroup","Y":"100.0","x":"50.0","count":"31","transfer":"8","mark":"4","sem":"SECOND","idPerson":"0"}
+show
+history
