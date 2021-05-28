@@ -49,14 +49,14 @@ public class CommandHandler {
         commands.put(cmd.getName(), cmd);
     }
 
-    public CommandHandler() {
+   /* public CommandHandler() {
         FileParser io = new FileParser();
         try {
             io.read(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     public void execute() {
         Scanner scanner = new Scanner(System.in);
@@ -76,7 +76,7 @@ public class CommandHandler {
                         System.out.println("Команда не распознана, список команд => help");
                         continue;
                     }
-                    if (cmd.execute(this, pc.getArgs())) {
+                    if (cmd.validation(this, pc.getArgs())) {
                         Client.send(cmd);
                     }
 

@@ -6,6 +6,12 @@ import appliances.StudyGroup;
 import java.util.List;
 
 public class Show implements Command {
+
+    @Override
+    public boolean validation(CommandHandler commandHandler, String... args) {
+        return args == null;
+    }
+
     @Override
     public boolean execute(CommandHandler commandHandler, String... args) {
         if (args == null) {

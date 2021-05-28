@@ -5,20 +5,93 @@ import appliances.StudyGroup;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Scanner;
 
 public class AddIfMax implements Command {
     @Override
     public boolean validation(CommandHandler commandHandler, String... args) {
-        if (args != null) {
-            if (args.length != 1 || args[0].equals("")){
-                System.out.println("неверное кол-во аргументов");
+        if (args != null && args.length == 1) {
+            int max;
+            try {
+                max = Integer.parseInt(args[0]);
+            } catch (Exception e) {
+                System.out.println("В качестве аргумента не Integer или <0");
                 return false;
             }
-            else return true;
-        } else {
-            System.out.println("Почему без аргументов?");
-            return false;
+
+            String name;
+            Scanner scanner = new Scanner(System.in);
+            double xCor = 0, yCor = 0;
+            int count = 0, transfer = 0, mark = 0, id = 0, sem = 0;
+
+            System.out.println("StudyGroups, введите такие поля, как (Обязательные поля помечены *):" +
+                    "\n1*. Название Name (String)\n2*. id Админа (Person)\n3. Координаты x y " +
+                    "\n4. Кол-во студентов (int).\n5. Перевед-ые студенты (int)\n6. Средн.Оценка (int, знач > 0)" +
+                    "\n7. Номер семестра.");
+
+            do {
+                System.out.print("Введите Название> ");
+                name = scanner.nextLine();
+                if (!name.equals("")) break;
+                else System.out.println("Неверный формат ввода, пожалуйста, попробуйте снова.");
+            } while (true);
+
+            do {
+                try {
+                    System.out.print("Введите id_Person для выбора Админа группы> ");
+                    id = Integer.parseInt(scanner.nextLine());
+                    break;
+                } catch (Exception e) {
+                    System.out.println("Неверный формат ввода, пожалуйста, попробуйте снова.");
+                }
+            } while (true);
+            do {
+                System.out.print("Введите Координаты x y> ");
+                try {
+                    xCor = Double.parseDouble(scanner.nextLine());
+                    yCor = Double.parseDouble(scanner.nextLine());
+                    break;
+                } catch (Exception e) {
+                    System.out.println("Неверный формат координат, введите заново");
+                }
+            } while (true);
+
+            System.out.print("Введите Количество студентов> ");
+            try {
+                int temp = Integer.parseInt(scanner.nextLine());
+                if (temp >= 0) count = temp;
+            } catch (Exception e) {
+                System.out.println("Неверный формат, присвоен 0");
+            }
+
+            System.out.print("Введите Количество переведенных студентов> ");
+            try {
+                int temp = Integer.parseInt(scanner.nextLine());
+                if (temp >= 0) transfer = temp;
+            } catch (Exception e) {
+                System.out.println("Неверный формат, присвоен 0");
+            }
+
+            System.out.print("Введите значение сред. оценки в группе> ");
+            try {
+                int temp = Integer.parseInt(scanner.nextLine());
+                if (temp >= 0 && temp <= 5) mark = temp;
+            } catch (Exception e) {
+                System.out.println("Неверный формат, присвоен 0");
+            }
+
+            do {
+                System.out.print("Введите номер семестра> ");
+                try {
+                    sem = Integer.parseInt(scanner.nextLine());
+                    break;
+                } catch (Exception e) {
+                    System.out.println("Неверный формат координат, введите заново");
+                }
+            } while (true);
+            return true;
         }
+        return false;
     }
 
     @Override

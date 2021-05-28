@@ -7,6 +7,23 @@ import java.util.Iterator;
 
 public class RemoveGreater implements Command {
     @Override
+    public boolean validation(CommandHandler commandHandler, String... args) {
+        if (args != null) {
+            int id;
+            try {
+                id = Integer.parseInt(args[0]);
+                return true;
+            } catch (Exception e) {
+                System.out.println("В качестве аргумента не Integer или <0");
+                return false;
+            }
+        } else {
+            System.out.println("Почему без аргументов?");
+            return false;
+        }
+    }
+
+    @Override
     public boolean execute(CommandHandler commandHandler, String... args) {
         if (args != null) {
             if (args.length != 1) return false;

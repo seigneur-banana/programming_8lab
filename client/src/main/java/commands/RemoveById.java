@@ -9,11 +9,14 @@ public class RemoveById implements Command {
     @Override
     public boolean validation(CommandHandler commandHandler, String... args) {
         if (args != null) {
-            if (args.length != 1 || args[0].equals("")){
-                System.out.println("неверное кол-во аргументов");
+            int id;
+            try {
+                id = Integer.parseInt(args[0]);
+                return true;
+            } catch (Exception e) {
+                System.out.println("В качестве аргумента не Integer или <0");
                 return false;
             }
-            else return true;
         } else {
             System.out.println("Почему без аргументов?");
             return false;
