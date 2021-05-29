@@ -6,18 +6,9 @@
 
     <groupId>sir.banana</groupId>
     <artifactId>progrServer</artifactId>
-    <version>1.0</version>
+    <version>2.0</version>
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>8</source>
-                    <encoding>UTF-8</encoding>
-                    <target>8</target>
-                </configuration>
-            </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
@@ -44,8 +35,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>7</source>
-                    <target>7</target>
+                    <source>8</source>
+                    <encoding>UTF-8</encoding>
+                    <target>8</target>
                 </configuration>
             </plugin>
         </plugins>
@@ -59,7 +51,7 @@
         <dependency>
             <groupId>sir.banana</groupId>
             <artifactId>progrLib</artifactId>
-            <version>1.0</version>
+            <version>2.0</version>
         </dependency>
     </dependencies>
 
