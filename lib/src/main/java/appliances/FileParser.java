@@ -14,8 +14,7 @@ public class FileParser {
         //        "height", "eye", "hair", "country", "locX", "locY", "locName"};
 
         try {
-            String inPutPath = System.getenv("Lab5");
-            FileInputStream fileInputStream = new FileInputStream(inPutPath);
+            FileInputStream fileInputStream = new FileInputStream("in.csv");
             BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream, 200);
             int i;
             StringBuilder s = new StringBuilder();

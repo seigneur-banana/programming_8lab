@@ -8,7 +8,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.*;
-import java.util.logging.Level;
 
 import static major.Main.getArgs;
 
@@ -36,19 +35,21 @@ public class Client extends Thread {
             byte[] b = byteArrayOutputStream.toByteArray();
 
             try {
-                SocketAddress address = new InetSocketAddress("127.0.0.1", 1337);
-                DatagramSocket socket = new DatagramSocket();
-                socket.setSoTimeout(10000);
-                DatagramPacket packet = new DatagramPacket(b, b.length, address);
-                socket.send(packet);
+                if (getArgs() != null && getArgs().length == 2) {
+                    SocketAddress address = new InetSocketAddress(Main.getArgs()[0], Integer.parseInt(Main.getArgs()[1]));
+                    DatagramSocket socket = new DatagramSocket();
+                    socket.setSoTimeout(10000);
+                    DatagramPacket packet = new DatagramPacket(b, b.length, address);
+                    socket.send(packet);
 
-                try {
-                    b = new byte[10000];
-                    packet = new DatagramPacket(b, b.length);
-                    socket.receive(packet);
-                    System.out.println(new String(b));
-                } catch (SocketTimeoutException e) {
-                    System.out.println("Время ожидания ответа от сервера истекло!");
+                    try {
+                        b = new byte[10000];
+                        packet = new DatagramPacket(b, b.length);
+                        socket.receive(packet);
+                        System.out.println(new String(b).trim());
+                    } catch (SocketTimeoutException e) {
+                        System.out.println("Время ожидания ответа от сервера истекло!");
+                    }
                 }
             } catch (SocketException e) {
                 System.out.println("Ошибка отправки пакета!");

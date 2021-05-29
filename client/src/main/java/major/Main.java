@@ -7,6 +7,7 @@ public class Main {
     private static String[] args;
 
     public static void main(String[] args) {
+        Main.args = args;
         CommandHandler ch = new CommandHandler();
         Show sh = new Show();
         new Thread(new Client()).start();

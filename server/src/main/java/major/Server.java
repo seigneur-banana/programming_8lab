@@ -1,23 +1,19 @@
 package major;
-import appliances.CommandHandler;
 import commands.Command;
-
 import java.io.*;
 import java.net.*;
-import java.util.logging.Level;
-
 import static major.Main.*;
 
 public class Server extends Thread {
     private DatagramSocket socket;
 
     public Server() {
-        if (/*getArgs().length < 2*/false) {
+        if (getArgs() == null || getArgs().length < 1) {
             System.out.println("Сервер не запущен, так как не указан порт!\n(число от 0 до 65535 должно быть передано вторым аргументом командной строки)");
         } else {
-           // System.out.println("Пытаемся запустить сервер на порте "+getArgs()[0]+"...");
+            System.out.println("Пытаемся запустить сервер на порте "+getArgs()[0]+"...");
             try {
-                socket = new DatagramSocket(/*(int) Long.parseLong(getArgs()[0])*/1337);
+                socket = new DatagramSocket((int) Long.parseLong(getArgs()[0]));
                 System.out.println("Сервер успешно запущен!");
             } catch (SocketException e) {
                 System.out.println("Не удалось запустить сервер на этом порте!");

@@ -2,7 +2,6 @@ package major;
 
 import appliances.CommandHandler;
 import appliances.FileParser;
-import commands.Command;
 import commands.Save;
 
 public class Main {
@@ -17,6 +16,7 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Main.args = args;
         Server server = new Server();
         if (server.getSocket() != null) {
             server.setDaemon(true);
