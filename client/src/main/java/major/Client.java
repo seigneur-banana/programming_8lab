@@ -1,14 +1,32 @@
+
 package major;
 
+import appliances.CommandHandler;
 import commands.Command;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.*;
+import java.util.logging.Level;
 
+import static major.Main.getArgs;
 
-public class Client {
+public class Client extends Thread {
+    @Override
+    public void run() {
+        while (true) {
+            if (CommandHandler.getCommand() != null) {
+                send(CommandHandler.getCommand());
+                CommandHandler.setCommand(null);
+            }
+            try {
+                sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     public static void send(Command command) {
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

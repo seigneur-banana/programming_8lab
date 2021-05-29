@@ -1,4 +1,5 @@
 package major;
+import appliances.CommandHandler;
 import commands.Command;
 
 import java.io.*;
@@ -11,12 +12,12 @@ public class Server extends Thread {
     private DatagramSocket socket;
 
     public Server() {
-        if (getArgs().length < 2) {
+        if (/*getArgs().length < 2*/false) {
             System.out.println("Сервер не запущен, так как не указан порт!\n(число от 0 до 65535 должно быть передано вторым аргументом командной строки)");
         } else {
-            System.out.println("Пытаемся запустить сервер на порте "+getArgs()[1]+"...");
+           // System.out.println("Пытаемся запустить сервер на порте "+getArgs()[0]+"...");
             try {
-                socket = new DatagramSocket((int) Long.parseLong(getArgs()[1]));
+                socket = new DatagramSocket(/*(int) Long.parseLong(getArgs()[0])*/1337);
                 System.out.println("Сервер успешно запущен!");
             } catch (SocketException e) {
                 System.out.println("Не удалось запустить сервер на этом порте!");
@@ -39,6 +40,8 @@ public class Server extends Thread {
                 Command command = (Command) objectInputStream.readObject();
 
                 try {
+                     String response = command.execute(Main.getCommandHadler());
+                     b = response.getBytes();
                     packet = new DatagramPacket(b, b.length, packet.getAddress(), packet.getPort());
                     socket.send(packet);
                 } catch (IOException e) {

@@ -6,10 +6,21 @@ import appliances.StudyGroup;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.List;
 
-public class Save implements Command {
+public class Save extends Command {
     @Override
-    public boolean execute(CommandHandler commandHandler, String... args) {
+    public boolean validation(CommandHandler commandHandler, String... args) {
+        if (args == null) {
+            return true;
+        } else {
+            System.out.println("У save не может быть аргументов");
+            return false;
+        }
+    }
+
+    @Override
+    public String execute(CommandHandler commandHandler, String... args) {
         if (args == null) {
             try (PrintWriter writer = new PrintWriter(new File("in.csv"))) {
                 StringBuilder sb = new StringBuilder();
@@ -40,7 +51,7 @@ public class Save implements Command {
                 System.out.println(e.getMessage());
             }
         }
-        return true;
+        return "Сохранено";
     }
 
     @Override
