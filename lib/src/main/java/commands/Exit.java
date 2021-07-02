@@ -1,8 +1,13 @@
 package commands;
 
 import appliances.CommandHandler;
+import major.User;
 
 public class Exit extends Command {
+    public Exit(User user) {
+        super(user);
+    }
+
     @Override
     public boolean validation(CommandHandler commandHandler, String... args) {
         if (args == null) {

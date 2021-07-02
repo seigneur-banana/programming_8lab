@@ -5,7 +5,7 @@ public class Location {
     private Integer y; //Поле не может быть null
     private String name; //Поле может быть null
 
-    Location(Integer y, Float x, String name) {
+    public Location(Integer y, Float x, String name) {
         this.y = y;
         this.x = x;
         this.name = name;

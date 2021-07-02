@@ -4,6 +4,8 @@ import appliances.CommandHandler;
 import appliances.Person;
 import appliances.Semester;
 import appliances.StudyGroup;
+import major.DBUnit;
+import major.User;
 
 import java.util.*;
 
@@ -12,6 +14,10 @@ public class Update extends Command {
     private double xCor = 0, yCor = 0;
     private int count = 0, transfer = 0, mark = 0, idAdmin = 0;
     private Integer idUpdate = 0;
+
+    public Update(User user) {
+        super(user);
+    }
 
     @Override
     public boolean validation(CommandHandler commandHandler, String... args) {
@@ -96,7 +102,7 @@ public class Update extends Command {
     }
 
     @Override
-    public synchronized String execute(CommandHandler commandHandler, String... args) {
+    public synchronized String execute(CommandHandler commandHandler, DBUnit dbUnit, String... args) {
         Person admin;
         Semester semestr = null;
         List<StudyGroup> list;
@@ -119,7 +125,7 @@ public class Update extends Command {
                     }
 
                     commandHandler.setCoordinates(yCor, xCor);
-                    commandHandler.setGroups(
+                    /*commandHandler.setGroups(
                             idUpdate,
                             name,
                             commandHandler.getCoordinates().get(commandHandler.getCoordinates().size() - 1),
@@ -127,10 +133,31 @@ public class Update extends Command {
                             transfer,
                             mark,
                             semestr,
-                            admin
+                            admin,
+                            user
+                    );*/
+
+                    StudyGroup tmp = new StudyGroup(
+                            idUpdate,
+                            name,
+                            commandHandler.getCoordinates().get(commandHandler.getCoordinates().size() - 1),
+                            new Date(),
+                            count,
+                            transfer,
+                            mark,
+                            semestr,
+                            admin,
+                            user
                     );
+                    commandHandler.getGroups().add(tmp);
+
+                    if (dbUnit.updateGroupInDB(tmp)) {
+                        System.out.println("Добавлен в БД");
+                    } else {
+                        return "При добавлении элемента возникла ошибка SQL!";
+                    }
                 } catch (Exception e) {
-                    System.out.println("Добавление не выполнено");
+                    e.printStackTrace();
                     return "Ошибка, не обновлен";
                 }
                 list = commandHandler.sortGroups();

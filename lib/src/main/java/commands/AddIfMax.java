@@ -4,8 +4,11 @@ import appliances.CommandHandler;
 import appliances.Person;
 import appliances.Semester;
 import appliances.StudyGroup;
+import major.DBUnit;
+import major.User;
 
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -13,6 +16,10 @@ public class AddIfMax extends Command {
     private String name, sem;
     private double xCor = 0, yCor = 0;
     private int count = 0, transfer = 0, mark = 0, id = 0, max;
+
+    public AddIfMax(User user) {
+        super(user);
+    }
 
     @Override
     public boolean validation(CommandHandler commandHandler, String... args) {
@@ -97,7 +104,7 @@ public class AddIfMax extends Command {
     }
 
     @Override
-    public synchronized String execute(CommandHandler commandHandler, String... args) {
+    public synchronized String execute(CommandHandler commandHandler, DBUnit dbUnit, String... args) {
         Person admin;
         Semester semestr = null;
 
@@ -128,8 +135,19 @@ public class AddIfMax extends Command {
                         transfer,
                         mark,
                         semestr,
-                        admin
+                        admin,
+                        user
                 );
+                for (Iterator<StudyGroup> iterator = commandHandler.getGroups().iterator(); iterator.hasNext(); ) {
+                    if (max == iterator.next().getId()) {
+                        if (dbUnit.addGroupToDB((StudyGroup)iterator)) {
+                            return "Элемент успешно добавлен!";
+                        } else {
+                            return "При добавлении элемента возникла ошибка SQL!";
+                        }
+                    }
+                }
+
                 return "Элемент добавлен";
             } catch (Exception e) {
                 return "Добавление не выполнено";

@@ -2,6 +2,8 @@ package commands;
 
 import appliances.CommandHandler;
 import appliances.ParsedCommand;
+import major.DBUnit;
+import major.User;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -10,6 +12,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ExecuteScript extends Command {
+    public ExecuteScript(User user) {
+        super(user);
+    }
+
     @Override
     public boolean validation(CommandHandler commandHandler, String... args) {
         if (args != null) {
@@ -24,7 +30,7 @@ public class ExecuteScript extends Command {
     }
 
     @Override
-    public synchronized String execute(CommandHandler commandHandler, String... args) { //пофиксить рекурсию
+    public synchronized String execute(CommandHandler commandHandler, DBUnit dbUnit, String... args) { //пофиксить рекурсию
         if (args != null) {
             if (args.length != 1) return "Неверное количество аргументов";
             try {
@@ -39,7 +45,7 @@ public class ExecuteScript extends Command {
                     if (line.matches("\\s*add\\s+\\{ *\"[^\"\\r\\n]*\" *: *\"[^\"\\r\\n]*\"( *, *\"[^\"\\r\\n]*\" *: *\"[^\"\\r\\n]*\"){7} *}")) {
                         Matcher m = Pattern.compile("\\{\\s*[^{}]+\\s*}").matcher(line);
                         if (m.find()) {
-                            if (Add.addFromScript(commandHandler, Add.isItIdUnique(commandHandler, commandHandler.getGroups().size()), m.group(), 0))
+                            if (Add.addFromScript(commandHandler, Add.isItIdUnique(commandHandler, commandHandler.getGroups().size()), m.group(), 0, dbUnit))
                                 System.out.println("Элемент добавлен");
                             continue;
                         }
@@ -48,7 +54,7 @@ public class ExecuteScript extends Command {
                         Matcher m = Pattern.compile("\\{\\s*[^{}]+\\s*}").matcher(line);
                         if (m.find()) {
                             String[] columns = line.split(" ");
-                            if (Add.addFromScript(commandHandler, Integer.parseInt(columns[1]), m.group(), 1))
+                            if (Add.addFromScript(commandHandler, Integer.parseInt(columns[1]), m.group(), 1, dbUnit))
                                 System.out.println("Элемент обновлен");
                             continue;
                         }
@@ -56,7 +62,7 @@ public class ExecuteScript extends Command {
                     if (line.matches("\\s*add_if_max\\s+\\{ *\"[^\"\\r\\n]*\" *: *\"[^\"\\r\\n]*\"( *, *\"[^\"\\r\\n]*\" *: *\"[^\"\\r\\n]*\"){7} *}")) {
                         Matcher m = Pattern.compile("\\{\\s*[^{}]+\\s*}").matcher(line);
                         if (m.find()) {
-                            if (Add.addFromScript(commandHandler, Add.isItIdUnique(commandHandler, commandHandler.getGroups().size()), m.group(), 2))
+                            if (Add.addFromScript(commandHandler, Add.isItIdUnique(commandHandler, commandHandler.getGroups().size()), m.group(), 2,  dbUnit))
                                 System.out.println("Элемент добавлен");
                             continue;
                         }
@@ -70,7 +76,7 @@ public class ExecuteScript extends Command {
                     if (cmd.getName().toLowerCase().equals("execute_script") && pc.getArgs()[0].toLowerCase().equals(args[0].toLowerCase())) {
                         System.out.println("Скрипт вызывает сам себя, Удалите в файле эту строчку :)");
                     } else {
-                        cmd.execute(commandHandler, pc.getArgs());
+                        cmd.execute(commandHandler, dbUnit, pc.getArgs());
                     }
                 }
             } catch (Exception e) {

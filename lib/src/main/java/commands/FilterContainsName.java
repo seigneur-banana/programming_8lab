@@ -2,10 +2,16 @@ package commands;
 
 import appliances.CommandHandler;
 import appliances.StudyGroup;
+import major.DBUnit;
+import major.User;
 
 import java.util.Iterator;
 
 public class FilterContainsName extends Command {
+    public FilterContainsName(User user) {
+        super(user);
+    }
+
     @Override
     public boolean validation(CommandHandler commandHandler, String... args) {
         if (args != null) {
@@ -21,7 +27,7 @@ public class FilterContainsName extends Command {
     }
 
     @Override
-    public synchronized String execute(CommandHandler commandHandler, String... args) {
+    public synchronized String execute(CommandHandler commandHandler, DBUnit dbUnit, String... args) {
         StringBuilder s = new StringBuilder();
         for (Iterator<StudyGroup> iterator = commandHandler.getGroups().iterator(); iterator.hasNext(); ) {
             StudyGroup temp = iterator.next();

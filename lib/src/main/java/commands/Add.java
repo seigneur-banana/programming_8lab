@@ -1,6 +1,8 @@
 package commands;
 
 import appliances.*;
+import major.DBUnit;
+import major.User;
 import org.json.simple.parser.ParseException;
 
 import java.util.*;
@@ -9,6 +11,10 @@ public class Add extends Command {
     private String name, sem;
     private double xCor = 0, yCor = 0;
     private int count = 0, transfer = 0, mark = 0, id = 0;
+
+    public Add(User user) {
+        super(user);
+    }
 
     @Override
     public boolean validation(CommandHandler commandHandler, String... args) {
@@ -86,7 +92,7 @@ public class Add extends Command {
     }
 
     @Override
-    public synchronized String execute(CommandHandler commandHandler, String... args) {
+    public synchronized String execute(CommandHandler commandHandler, DBUnit dbUnit, String... args) {
         Person admin;
         Semester semestr = null;
         try {
@@ -104,19 +110,39 @@ public class Add extends Command {
             }
 
             commandHandler.setCoordinates(yCor, xCor);
-            commandHandler.setGroups(
-                    isItIdUnique(commandHandler, commandHandler.getGroups().size()),
+            /*commandHandler.setGroups(
+                    new_id,
                     name,
                     commandHandler.getCoordinates().get(commandHandler.getCoordinates().size() - 1),
                     count,
                     transfer,
                     mark,
                     semestr,
-                    admin
+                    admin,
+                    user
+            );*/
+            StudyGroup tmp = new StudyGroup(
+                    isItIdUnique(commandHandler, commandHandler.getGroups().size()),
+                    name,
+                    commandHandler.getCoordinates().get(commandHandler.getCoordinates().size() - 1),
+                    new Date(),
+                    count,
+                    transfer,
+                    mark,
+                    semestr,
+                    admin,
+                    user
             );
-            return "Элемент добавлен";
+            commandHandler.getGroups().add(tmp);
+
+            if (dbUnit.addGroupToDB(tmp)) {
+                return "Элемент успешно добавлен!";
+            } else {
+                return "При добавлении элемента возникла ошибка SQL!";
+            }
+
         } catch (Exception e) {
-            return "Добавление не выполнено";
+            return "Ошибка при добавлении: "+ e.toString();
         }
     }
 
@@ -145,7 +171,7 @@ public class Add extends Command {
         else return id;
     }
 
-    public static boolean addFromScript(CommandHandler commandHandler, Integer idGroup, String str, int choice) throws ParseException {
+    public static boolean addFromScript(CommandHandler commandHandler, Integer idGroup, String str, int choice, DBUnit dbUnit) throws ParseException {
         if (choice == 1) {
             boolean match = false;
             for (Iterator<StudyGroup> iterator = commandHandler.getGroups().iterator(); iterator.hasNext(); )
@@ -154,9 +180,7 @@ public class Add extends Command {
                 System.out.println("Элемента с таким id не было . . .");
                 return false;
             }
-            for (Iterator<StudyGroup> iterator = commandHandler.getGroups().iterator(); iterator.hasNext(); )
-                if (idGroup.equals(iterator.next().getId()))
-                    iterator.remove();
+            commandHandler.getGroups().removeIf(studyGroup -> idGroup.equals(studyGroup.getId()));
         }
         ArrayList<String> ar = FileParser.parseJSON(str);
         double corY = 0.0, corX = 0.0;
@@ -201,6 +225,7 @@ public class Add extends Command {
             System.out.println("Ошибка при чтении id админа");
         }
         commandHandler.setCoordinates(corY, corX);
+        User user1 = new User("admin", "admin");
         commandHandler.setGroups(
                 idGroup,                                                                        //id group
                 name,                                                                           //name group
@@ -209,8 +234,15 @@ public class Add extends Command {
                 transfer,
                 mark,
                 sem,
-                commandHandler.getPersons().get(id)                                             //admin
+                commandHandler.getPersons().get(id),                                             //admin
+                user1
         );
+
+        for (Iterator<StudyGroup> iterator = commandHandler.getGroups().iterator(); iterator.hasNext(); ) {
+            if (idGroup.equals(iterator.next().getId())) {
+                return dbUnit.addGroupToDB((StudyGroup) iterator);
+            }
+        }
         if (choice == 2) {
             List<StudyGroup> list = commandHandler.sortGroups();
             Collections.sort(list);

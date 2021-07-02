@@ -1,6 +1,8 @@
 package appliances;
 
 import commands.*;
+import major.DBUnit;
+import major.User;
 
 import java.util.*;
 
@@ -8,95 +10,53 @@ import java.util.*;
 public class CommandHandler {
     private static final String ERR_MSG = "Command not found";
 
-    private Queue<String> history = new LinkedList<>();
-    private Map<String, Command> commands = new HashMap<>();
-    private Map<Integer, Location> locations = new HashMap<>();
+    protected Queue<String> history = new LinkedList<>();
+    protected Map<String, Command> commands = new HashMap<>();
+    protected Map<Integer, Location> locations = new HashMap<>();
 
-    private Map<Integer, Coordinates> coordinates = new HashMap<>();
-    private Map<Integer, Person> persons = new HashMap<>();
-    private Set<StudyGroup> groups = new LinkedHashSet<>();
-    private Date time = new Date();
-    private static Command command;
-    private static boolean mode = false;
+    protected Map<Integer, Coordinates> coordinates = new HashMap<>();
+    protected Map<Integer, Person> persons = new HashMap<>();
+    protected Set<StudyGroup> groups = new LinkedHashSet<>();
+    protected Date time = new Date();
+    protected static Command command;
 
-    {
-        Command cmd = new History();
+    public CommandHandler(User user) {
+        Command cmd = new History(user);
         commands.put(cmd.getName(), cmd);
-        cmd = new Help();
+        cmd = new Help(user);
         commands.put(cmd.getName(), cmd);
-        cmd = new Exit();
+        cmd = new Exit(user);
         commands.put(cmd.getName(), cmd);
-        cmd = new ExecuteScript();
+        cmd = new ExecuteScript(user);
         commands.put(cmd.getName(), cmd);
-        cmd = new Add();
+        cmd = new Add(user);
         commands.put(cmd.getName(), cmd);
-        cmd = new Info();
+        cmd = new Info(user);
         commands.put(cmd.getName(), cmd);
-        cmd = new Show();
+        cmd = new Show(user);
         commands.put(cmd.getName(), cmd);
-        cmd = new Clear();
+        cmd = new Clear(user);
         commands.put(cmd.getName(), cmd);
-        cmd = new AddIfMax();
+        cmd = new AddIfMax(user);
         commands.put(cmd.getName(), cmd);
-        cmd = new RemoveById();
+        cmd = new RemoveById(user);
         commands.put(cmd.getName(), cmd);
-        cmd = new FilterContainsName();
+        cmd = new FilterContainsName(user);
         commands.put(cmd.getName(), cmd);
-        cmd = new PrintDescending();
+        cmd = new PrintDescending(user);
         commands.put(cmd.getName(), cmd);
-        cmd = new RemoveAllBySemesterEnum();
+        cmd = new RemoveAllBySemesterEnum(user);
         commands.put(cmd.getName(), cmd);
-        cmd = new RemoveGreater();
+        cmd = new RemoveGreater(user);
         commands.put(cmd.getName(), cmd);
-        cmd = new Update();
+        cmd = new Update(user);
         commands.put(cmd.getName(), cmd);
     }
 
-   /* public CommandHandler() {
-        FileParser io = new FileParser();
-        try {
-            io.read(this);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }*/
-
-    public void execute() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Приветствие!!! @Допиши сюда что-то хорошее@ ");
-        while (true) {
-            try {
-                System.out.print("> ");
-                String str = scanner.nextLine();
-
-                ParsedCommand pc = new ParsedCommand(str);
-                if (pc.getCommand() == null || "".equals(pc.getCommand())) {
-                    continue;
-                }
-                Command cmd = commands.get(pc.getCommand().toLowerCase());
-
-                if (cmd == null) {
-                    System.out.println("Команда не распознана, список команд => help");
-                    continue;
-                } else {
-                    if (cmd.validation(this, pc.getArgs())) {
-                        if (mode) {
-                            System.out.println(cmd.execute(this, pc.getArgs()));
-                        } else {
-                            CommandHandler.command = cmd;
-                        }
-                    } else {
-                        System.out.println("Такой команды не существует! Список команд: help");
-                    }
-                }
-
-                history.add(str);
-                if (history.size() == 9) {
-                    history.remove();
-                }
-            } catch (Exception e) {
-                System.out.println("Ошибка вызовы функции");
-            }
+    protected void addToHistory(String com) {
+        history.add(com);
+        if (history.size() == 9) {
+            history.remove();
         }
     }
 
@@ -140,9 +100,6 @@ public class CommandHandler {
         CommandHandler.command = com;
     }
 
-    public static void switchMode() {
-        mode = !mode;
-    }
 
 
     public void setLocations(Integer y, Float x, String name) {
@@ -150,9 +107,7 @@ public class CommandHandler {
         locations.put(locations.size(), tmp);
     }
 
-    public void addCommand(String name, Command command) {
-        commands.put(name, command);
-    }
+
 
     public void setPersons(String name, int height, Color eyeColor, Color hairColor, Country nationality, Location location) {
         Person tmp = new Person(name, height, eyeColor, hairColor, nationality, location);
@@ -164,8 +119,8 @@ public class CommandHandler {
         coordinates.put(coordinates.size(), tmp);
     }
 
-    public void setGroups(Integer id, String name, Coordinates coordinates, int count, int transfer, int mark, Semester sem, Person admin) {
-        StudyGroup tmp = new StudyGroup(id, name, coordinates, new Date(), count, transfer, mark, sem, admin);
+    public void setGroups(Integer id, String name, Coordinates coordinates, int count, int transfer, int mark, Semester sem, Person admin, User user) {
+        StudyGroup tmp = new StudyGroup(id, name, coordinates, new Date(), count, transfer, mark, sem, admin, user);
         groups.add(tmp);
     }
 

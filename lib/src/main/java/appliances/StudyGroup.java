@@ -1,5 +1,7 @@
 package appliances;
 
+import major.User;
+
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
@@ -14,8 +16,9 @@ public class StudyGroup implements Comparable<StudyGroup> {
     private int averageMark; //Значение поля должно быть больше 0
     private Semester semesterEnum; //Поле может быть null
     private Person groupAdmin; //Поле не может быть null
+    private User user;
 
-    StudyGroup(Integer id, String name, Coordinates coordinates, Date date, int count, int transfer, int mark, Semester sem, Person admin) {
+    public StudyGroup(Integer id, String name, Coordinates coordinates, Date date, int count, int transfer, int mark, Semester sem, Person admin, User user) {
         this.id = id;
         this.name = name;
         this.coordinates = coordinates;
@@ -25,6 +28,7 @@ public class StudyGroup implements Comparable<StudyGroup> {
         this.averageMark = mark;
         this.semesterEnum = sem;
         this.groupAdmin = admin;
+        this.user = user;
     }
 
     @Override
@@ -37,7 +41,8 @@ public class StudyGroup implements Comparable<StudyGroup> {
                 "; transferredStudents: " + transferredStudents +
                 "; averageMark: " + averageMark +
                 "; semesterEnum: " + semesterEnum +
-                "; groupAdmin: " + groupAdmin.getName() + "\n";
+                "; groupAdmin: " + groupAdmin.getName() + "\n" +
+                "; User: " + user.getName() + "\n";
     }
 
     public Integer getId() {
@@ -50,6 +55,10 @@ public class StudyGroup implements Comparable<StudyGroup> {
 
     public void setCount(Integer count) {
         this.studentsCount = count;
+    }
+
+    public Date getCreationDate(){
+        return creationDate;
     }
 
     public Semester getSemesterEnum() {
@@ -91,5 +100,12 @@ public class StudyGroup implements Comparable<StudyGroup> {
         public int compare(StudyGroup o1, StudyGroup o2) {
             return o1.creationDate.compareTo(o2.creationDate);
         }
+    }
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

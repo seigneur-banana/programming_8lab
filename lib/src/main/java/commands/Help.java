@@ -1,8 +1,14 @@
 package commands;
 import appliances.CommandHandler;
+import major.User;
+
 import java.util.Map;
 
 public class Help extends Command{
+    public Help(User user) {
+        super(user);
+    }
+
     @Override
     public boolean validation(CommandHandler commandHandler, String... args) {
         if (args == null) {

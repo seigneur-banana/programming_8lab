@@ -4,7 +4,7 @@ public class Coordinates {
     private double x;
     private Double y; //Значение поля должно быть больше -748, Поле не может быть null
 
-    Coordinates(Double y, double x) {
+    public Coordinates(Double y, double x) {
         this.y = y;
         this.x = x;
     }

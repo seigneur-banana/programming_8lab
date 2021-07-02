@@ -2,11 +2,18 @@ package commands;
 
 import appliances.CommandHandler;
 import appliances.StudyGroup;
+import major.DBUnit;
+import major.User;
 
 import java.util.Collections;
 import java.util.List;
 
 public class PrintDescending extends Command {
+
+    public PrintDescending(User user) {
+        super(user);
+    }
+
     @Override
     public boolean validation(CommandHandler commandHandler, String... args) {
         if (args == null) {
@@ -18,7 +25,7 @@ public class PrintDescending extends Command {
     }
 
     @Override
-    public synchronized String execute(CommandHandler commandHandler, String... args) {
+    public synchronized String execute(CommandHandler commandHandler, DBUnit dbUnit, String... args) {
         List<StudyGroup> list = commandHandler.sortGroups();
         Collections.sort(list, Collections.reverseOrder());
         return "Descending StudyGroup :\n" + list.toString();
