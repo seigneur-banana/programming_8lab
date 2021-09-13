@@ -14,7 +14,7 @@ public class CommandHandlerForClient extends CommandHandler {
     }
     public void execute(InputStream stream) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Приветствие!!! @Допиши сюда что-то хорошее@ ");
+        System.out.println("Hello world!!! you look beautiful");
         while (scanner.hasNext()) {
             try {
                 System.out.print("> ");
@@ -27,19 +27,19 @@ public class CommandHandlerForClient extends CommandHandler {
                 Command cmd = commands.get(pc.getCommand().toLowerCase());
 
                 if (cmd == null) {
-                    System.out.println("Команда не распознана, список команд => help");
+                    System.out.println("Command not detected, available commands => help");
                     continue;
                 } else {
                     if (cmd.validation(this, pc.getArgs())) {
                         Client.send(cmd);
                     } else {
-                        System.out.println("Такой команды не существует! Список команд: help");
+                        System.out.println("Command not detected, available commands => help");
                     }
                 }
                 addToHistory(str);
 
             } catch (Exception e) {
-                System.out.println("Ошибка вызовы функции");
+                System.out.println("CommandHandler Exception");
             }
         }
     }

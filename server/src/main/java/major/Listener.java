@@ -13,10 +13,10 @@ public class Listener extends Thread {
     public boolean bind (int port) {
         try {
             socket = new DatagramSocket(port);
-            System.out.println("Сервер успешно запущен!");
+            System.out.println("Server started!");
             return true;
         } catch (SocketException e) {
-            System.out.println("Не удалось запустить сервер на порте " + port + "!");
+            System.out.println("Failed to start the server on the port " + port + "!");
             return false;
         }
     }

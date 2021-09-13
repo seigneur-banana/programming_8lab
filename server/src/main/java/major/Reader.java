@@ -31,7 +31,7 @@ public class Reader extends Thread{
 
             new Writer(socket, packet, command).start();
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Ошибка десериализации");
+            System.out.println("Deserialization error");
         } catch (ClassCastException e) {
             try {
                 ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(b);
@@ -46,7 +46,7 @@ public class Reader extends Thread{
 
                 new Writer(socket, packet, user).start();
             } catch (IOException | ClassNotFoundException e1) {
-                System.out.println("Ошибка десериализации");
+                System.out.println("Deserialization error");
             }
         }
     }

@@ -22,7 +22,7 @@ public class CommandHandlerForServer extends CommandHandler {
 
     public void execute(DBUnit dbUnit) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Приветствие!!! @Допиши сюда что-то хорошее@ ");
+        System.out.println("Hello world!!! you look beautiful");
         while (true) {
             try {
                 System.out.print("> ");
@@ -35,21 +35,21 @@ public class CommandHandlerForServer extends CommandHandler {
                 Command cmd = commands.get(pc.getCommand().toLowerCase());
 
                 if (cmd == null) {
-                    System.out.println("Команда не распознана, список команд => help");
+                    System.out.println("Command not detected, available commands => help");
                     continue;
                 } else {
                     if (cmd.validation(this, pc.getArgs())) {
                             System.out.println(cmd.execute(this, dbUnit, pc.getArgs()));
 
                     } else {
-                        System.out.println("Такой команды не существует! Список команд: help");
+                        System.out.println("Command not detected, available commands => help");
                     }
                 }
 
                 addToHistory(str);
 
             } catch (Exception e) {
-                System.out.println("Ошибка вызовы функции");
+                System.out.println("CommandHandler Exception");
             }
         }
     }

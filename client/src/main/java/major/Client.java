@@ -18,21 +18,21 @@ public class Client extends Thread {
     }
 
     public static void setUser() {
-        System.out.println("Здравствуйте");
+        System.out.println("Hello client");
         Scanner in = new Scanner(System.in);
         while (true) {
             try {
-                System.out.println("Для входа введите 1, для регистрации введите 2, для выхода введите 3 (без пробелов):");
+                System.out.println("To log in enter 1; to register enter 2; to exit enter 3 (without spaces):");
                 String check = in.nextLine();
                 if (!check.equals("1") & !check.equals("2") & !check.equals("3")) {
                     throw new InputMismatchException();
                 } else if (check.equals("3")){
-                    System.out.println("Программа завершает работу.");
+                    System.out.println("Goodbye");
                     System.exit(1);
                 } else {
-                    System.out.println("Введите имя пользователя:");
+                    System.out.println("Enter Login:");
                     String name = in.nextLine();
-                    System.out.println("Введите пароль: ");
+                    System.out.println("Enter password: ");
                     String password = in.nextLine();
                     User user = new User(name, password);
                     user.setCheckOrAdd(check.equals("1"));
@@ -40,15 +40,15 @@ public class Client extends Thread {
                     if (user != null) {
                         Client.user = user;
                         if (check.equals("1")) {
-                            System.out.print("Вы успешно вошли! ");
+                            System.out.print("You have successfully logged in! ");
                         } else {
-                            System.out.print("Вы успешно зарегистрировались! ");
+                            System.out.print("You have successfully registered! ");
                         }
                         break;
                     }
                 }
             } catch (InputMismatchException e) {
-                System.out.println("Некорректный ввод!");
+                System.out.println("Invalid data!");
             }
         }
     }
@@ -74,15 +74,15 @@ public class Client extends Thread {
                         socket.receive(packet);
                         System.out.println(new String(b).trim());
                     } catch (SocketTimeoutException e) {
-                        System.out.println("Время ожидания ответа от сервера истекло!");
+                        System.out.println("The waiting time for a response from the server has expired!");
                     }
             } catch (SocketException e) {
-                System.out.println("Ошибка отправки пакета!");
+                System.out.println("Error sending the package!");
             } catch (IllegalArgumentException e) {
-                System.out.println("Не удаётся подключиться к серверу!");
+                System.out.println("Unable to connect to the server!");
             }
         } catch (IOException e) {
-            System.out.println("Ошибка сериализации");
+            System.out.println("Serialization error");
         }
     }
 
@@ -112,36 +112,36 @@ public class Client extends Thread {
                             case 0:
                                 return user;
                             case 1:
-                                System.out.println("Неправильный пароль! Повторите ввод.");
+                                System.out.println("Wrong password! Repeat the input.");
                                 break;
                             case 2:
-                                System.out.println("Пользователя с таким именем и паролем не существует! Повторите ввод.");
+                                System.out.println("There is no user with this name and password! Repeat the input.");
                                 break;
                             case 3:
-                                System.out.println("При проверке/создании имени пользователя и пароля возникла ошибка SQL! Повторите ввод.");
+                                System.out.println("An SQL error occurred while checking/creating the username and password! Repeat the input.");
                                 break;
                             case 4:
-                                System.out.println("Пользователь с таким именем уже зарегистрирован! Повторите ввод.");
+                                System.out.println("A user with this name is already registered! Repeat the input.");
                                 break;
                         }
                         return null;
                     } catch (ClassNotFoundException e) {
-                        System.out.println("Ошибка десериализации пользователя! Повторите ввод.");
+                        System.out.println("User deserialization error! Repeat the input.");
                         return null;
                     }
                 } catch (SocketTimeoutException e) {
-                    System.out.println("Время ожидания ответа о пользователе от сервера истекло! Повторите ввод.");
+                    System.out.println("The waiting time for a response about the user from the server has expired! Repeat the input.");
                     return null;
                 }
             } catch (SocketException e) {
-                System.out.println("Ошибка отправки пакета о пользователе! Повторите ввод.");
+                System.out.println("Error sending a package about the user! Repeat the input.");
                 return null;
             } catch (IllegalArgumentException e) {
-                System.out.println("Не удаётся подключиться к серверу " + hostname + ":" + port + "! Проверьте данные для подключения, повторите ввод.");
+                System.out.println("Unable to connect to the server " + hostname + ":" + port + "! Check the connection data, repeat the input.");
                 return null;
             }
         } catch (IOException e) {
-            System.out.println("Ошибка сериализации пользователя! Повторите ввод.");
+            System.out.println("User serialization error! Repeat the input.");
             return null;
         }
     }

@@ -6,7 +6,8 @@ import commands.Show;
 public class Main {
     public static void main(String[] args) {
         if (args.length<2) {
-            System.out.println("Программа не запущена, так как не переданы IP (или hostname) и порт сервера!\n(Они должны быть переданы через аргументы командной строки. Формат IP: xxx.xxx.xxx.xxx; формат hostname: непустая строка; формат порта: число от 1 до 65535.)");
+            System.out.println("The program is not running, because the IP (or hostname) and the server port are not passed!\n" +
+                    "(They must be passed through command-line arguments. IP format: xxx. xxx.xxx. xxx; hostname format: non-empty string; port format: a number from 1 to 65535.)");
         } else {
             try{
                 int port = Integer.parseInt(args[1]);
@@ -20,7 +21,8 @@ public class Main {
                 }
             }
             catch (NumberFormatException e){
-                System.out.println("Программа не запущена, так как указан неправильный формат порта!\n(число от 1 до 65535 должно быть передано вторым аргументом командной строки)");
+                System.out.println("The program is not running because the wrong port format is specified!\n" +
+                        "(the number from 1 to 65535 should be passed as the second command line argument)");
             }
 
         }

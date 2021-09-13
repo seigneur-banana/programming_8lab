@@ -51,22 +51,22 @@ public class Main {
 
                 Scanner in = new Scanner(System.in);
                 while (true) {
-                    System.out.println("Введите пароль для входа в программу-сервер:");
+                    System.out.println("Enter the admin password:");
                     int errorId = dbUnit.checkUser(new User("admin", in.nextLine())).getErrorId();
                     if (errorId == 0) {
-                        System.out.println("Вы успешно вошли!");
+                        System.out.println("You have successfully logged in!");
                         break;
                     } else if (errorId == 1) {
-                        System.out.println("Неправильный пароль!");
+                        System.out.println("incorrect password!");
                     } else if (errorId == 2) {
-                        System.out.println("Пользователя admin нет в базе данных! Запуск программы невозможен, программа завершает работу.");
+                        System.out.println("Admin user don`t exists... goodbye");
                         System.exit(1);
                     } else if (errorId == 3) {
-                        System.out.println("При проверке пароля возникла ошибка SQL!");
+                        System.out.println("checking the password SQL Exception!");
                     }
-                    System.out.println("Для выхода введите exit (без пробелов), а для повторного ввода пароля - любую строку или нажмите Enter.");
+                    System.out.println("To exit, enter \"exit\" (without spaces), and to re-enter the password, enter any line or press Enter.");
                     if (in.nextLine().equals("exit")) {
-                        System.out.println("Программа завершает работу.");
+                        System.out.println("goodbye");
                         System.exit(1);
                     }
                 }
@@ -90,17 +90,17 @@ public class Main {
 
                 ch.execute(dbUnit);
             } catch (SQLException e) {
-                System.out.println("Возникла ошибка: " + e.getMessage());
-                System.out.println("Программа завершает работу, т.к. нет подключения к базе данных!");
+                System.out.println("Exception: " + e.getMessage());
+                System.out.println("The program shuts down because there is no connection to the database!");
             }
         }
         else {
-            System.out.println("Программа не запущена");
+            System.out.println("Programm isn't started");
         }
     }
     public static boolean setPort(String[] args) {
         if (args.length >= 2) {
-            System.out.println("Пытаемся запустить сервер на порте " + args[1] + "...");
+                System.out.println("starting the server on the port: " + args[1] + "...");
             try {
                 int port = Integer.parseInt(args[1]);
                 if (port < 1 || port > 65535) {
@@ -110,10 +110,12 @@ public class Main {
                 }
                 return true;
             } catch (NumberFormatException e) {
-                System.out.println("Сервер не запущен, так как указан неправильный формат порта!\n(число от 1 до 65535 должно быть передано вторым аргументом командной строки)");
+                System.out.println("The server is not running because the wrong port format is specified!\n" +
+                        "(the number from 1 to 65535 should be passed as the second command line argument)");
                 }
         } else {
-            System.out.println("Сервер не запущен, так как не указан порт!\n(число от 1 до 65535 должно быть передано вторым аргументом командной строки)");
+            System.out.println("The server is not running because the wrong port format is specified!\n" +
+                    "(the number from 1 to 65535 should be passed as the second command line argument)");
         }
         return false;
     }
@@ -121,13 +123,13 @@ public class Main {
     public static boolean setConnectionDetails(String[] args) {
         if (args.length > 0) {
             if (!Files.exists(Paths.get(args[0]))) {
-                System.out.println("Файл для подключения к базе данных с именем " + args[0] + " не существует!");
+                System.out.println("The file to connect to the database with the name " + args[0] + " doesn't exists!");
             } else if (Files.isDirectory(Paths.get(args[0]))) {
-                System.out.println("Файл для подключения к базе данных с именем " + args[0] + " не может быть открыт - в качестве файла была передана директория!");
+                System.out.println("The file to connect to the database with the name " + args[0] + " it can't be opened - a directory was passed as a file!");
             } else if (!Files.isRegularFile(Paths.get(args[0]))) {
-                System.out.println("Файл для подключения к базе данных с именем " + args[0] + " не может быть открыт -  был передан специальный файл!");
+                System.out.println("The file to connect to the database with the name " + args[0] + " can't be opened - a special file was transferred!");
             } else if (!Files.isReadable(Paths.get(args[0]))) {
-                System.out.println("Файл для подключения к базе данных с именем " + args[0] + " не может быть открыт - нет прав на чтение!");
+                System.out.println("The file to connect to the database with the name " + args[0] + " can't be opened - no read rights!");
             } else {
                 try (BufferedReader in = new BufferedReader(new FileReader(args[0]))) {
                     String s;
@@ -139,16 +141,16 @@ public class Main {
                                 password = s;
                                 return true;
                             } else {
-                                System.out.println("В файле для подключения к базе данных с именем " + args[0] + " отсутсвует password!");
+                                    System.out.println("In the file for connecting to the database with the name " + args[0] + " missing password!");
                             }
                         } else {
-                            System.out.println("В файле для подключения к базе данных с именем " + args[0] + " отсутсвуют username и password!");
+                            System.out.println("In the file for connecting to the database with the name " + args[0] + " missing username и password!");
                         }
                     } else {
-                        System.out.println("Файл для подключения к базе данных с именем " + args[0] + " пуст!");
+                        System.out.println("In the file for connecting to the database with the name " + args[0] + " is empty!");
                     }
                 } catch (IOException e) {
-                    System.out.println("Файл для подключения к базе данных с именем " + args[0] + " не существует!");
+                    System.out.println("In the file for connecting to the database with the name " + args[0] + " doesn't exists!");
                 }
             }
         }
