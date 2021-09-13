@@ -16,12 +16,12 @@ public class FilterContainsName extends Command {
     public boolean validation(CommandHandler commandHandler, String... args) {
         if (args != null) {
             if (args.length != 1 || args[0].equals("")){
-                System.out.println("неверное кол-во аргументов");
+                System.out.println("invalid number of arguments");
                 return false;
             }
             else return true;
         } else {
-            System.out.println("Почему без аргументов?");
+            System.out.println("Why without arguments?");
             return false;
         }
     }
@@ -36,7 +36,7 @@ public class FilterContainsName extends Command {
                 s.append(temp.toString());
             }
         }
-        return "Фильтр по имени: " + s.toString();
+        return "Filter by name: " + s.toString();
     }
 
     @Override
@@ -46,6 +46,6 @@ public class FilterContainsName extends Command {
 
     @Override
     public String getDescription() {
-        return " name : вывести элементы, значение поля name которых содержит заданную подстроку";
+        return " name : output elements whose name field value contains the specified substring";
     }
 }

@@ -19,7 +19,7 @@ public class PrintDescending extends Command {
         if (args == null) {
             return true;
         } else {
-            System.out.println("У PrintDescending не может быть аргументов");
+            System.out.println("PrintDescending can't have arguments");
             return false;
         }
     }
@@ -38,6 +38,6 @@ public class PrintDescending extends Command {
 
     @Override
     public String getDescription() {
-        return " : вывести элементы коллекции в порядке убывания";
+        return " : display the elements of the collection in descending order";
     }
 }

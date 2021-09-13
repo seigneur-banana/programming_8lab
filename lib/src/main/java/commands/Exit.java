@@ -11,7 +11,7 @@ public class Exit extends Command {
     @Override
     public boolean validation(CommandHandler commandHandler, String... args) {
         if (args == null) {
-            System.out.println("До скорых встреч! ;)");
+            System.out.println("Goodbye my friend ;)");
             System.exit(0);
         }
         return true;
@@ -24,6 +24,6 @@ public class Exit extends Command {
 
     @Override
     public String getDescription() {
-        return " : завершить программу (без сохранения в файл)";
+        return " : end the program (without saving it to a file)";
     }
 }

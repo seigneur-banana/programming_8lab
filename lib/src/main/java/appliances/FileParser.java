@@ -30,23 +30,23 @@ public class FileParser {
                         try {
                             if (Integer.parseInt(columns[8]) > 0) height = Integer.parseInt(columns[8]);
                         } catch (Exception e) {
-                            System.out.println("Ошибка при чтении роста");
+                            System.out.println("Error when reading ROST");
                         }
                         try {
                             if (Integer.parseInt(columns[3]) > 0) count = Integer.parseInt(columns[3]);
                         } catch (Exception e) {
-                            System.out.println("Ошибка при чтении кол-ва студентов");
+                            System.out.println("Error when reading growth");
                         }
                         try {
                             if (Integer.parseInt(columns[4]) > 0) transfer = Integer.parseInt(columns[4]);
                         } catch (Exception e) {
-                            System.out.println("Ошибка при чтении кол-ва перевед-х студентов");
+                            System.out.println("Error when reading COUNT OF TRANSFERRED STUDENTS");
                         }
                         try {
                             if (Integer.parseInt(columns[5]) > 0 && Integer.parseInt(columns[5]) <= 5)
                                 mark = Integer.parseInt(columns[5]);
                         } catch (Exception e) {
-                            System.out.println("Ошибка при чтении ср. оценки");
+                            System.out.println("Error when reading AVG MARK");
                         }
                         for (Semester semester : Semester.values()) {
                             if (columns[6].toLowerCase().equals(semester.name().toLowerCase())) {
@@ -78,22 +78,22 @@ public class FileParser {
                         try {
                             corY = Double.parseDouble(columns[2]);
                         } catch (Exception e) {
-                            System.out.println("Ошибка при чтении координаты Y");
+                            System.out.println("Error when reading the coordinate Y");
                         }
                         try {
                             corX = Double.parseDouble(columns[1]);
                         } catch (Exception e) {
-                            System.out.println("Ошибка при чтении координаты Х");
+                            System.out.println("Error when reading the coordinate Х");
                         }
                         try {
                             locY = Integer.parseInt(columns[13]);
                         } catch (Exception e) {
-                            System.out.println("Ошибка при чтении локации Y");
+                            System.out.println("Error when reading the location Y");
                         }
                         try {
                             locX = Float.parseFloat(columns[12]);
                         } catch (Exception e) {
-                            System.out.println("Ошибка при чтении координаты X");
+                            System.out.println("Error when reading the coordinate X");
                         }
 
                         commandHandler.setCoordinates(corY, corX); //y,x
@@ -120,10 +120,10 @@ public class FileParser {
                         s.setLength(0);
                     }
                 }catch (Exception e){
-                    System.out.println("Ошибка чтения");
+                    System.out.println("Reading exception");
                 }
             }
-            System.out.println("Данные подгружены из базы данных . . .");
+            System.out.println("The data is loaded from the database . . .");
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -27,8 +27,6 @@ public class CommandHandler {
         commands.put(cmd.getName(), cmd);
         cmd = new Exit(user);
         commands.put(cmd.getName(), cmd);
-        cmd = new ExecuteScript(user);
-        commands.put(cmd.getName(), cmd);
         cmd = new Add(user);
         commands.put(cmd.getName(), cmd);
         cmd = new Info(user);

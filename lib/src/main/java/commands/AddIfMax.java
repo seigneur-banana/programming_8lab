@@ -27,75 +27,75 @@ public class AddIfMax extends Command {
             try {
                 max = Integer.parseInt(args[0]);
             } catch (Exception e) {
-                System.out.println("В качестве аргумента не Integer или <0");
+                System.out.println("As an argument, not Integer or <0");
                 return false;
             }
 
             Scanner scanner = new Scanner(System.in);
 
-            System.out.println("Чтобы добавить StudyGroups, введите такие поля, как (Обязательные поля помечены *):" +
-                    "\n1*. Название Name (String)\n2*. id Админа (Person)\n3. Координаты x y " +
-                    "\n4. Кол-во студентов (int).\n5. Перевед-ые студенты (int)\n6. Средн.Оценка (int, знач > 0)" +
-                    "\n7. Номер семестра.");
+            System.out.println("StudyGroups, enter data(Required fields *):" +
+                    "\n1*. Name (String)\n2*. id Admin (Person)\n3. Coordinates x y " +
+                    "\n4. Count of students (int).\n5. Transferred students (int)\n6. Avg mark (int, знач > 0)" +
+                    "\n7. NUM of SEM.");
 
             do {
-                System.out.print("Введите Название> ");
+                System.out.print("Name> ");
                 name = scanner.nextLine();
                 if (!name.equals("")) break;
-                else System.out.println("Неверный формат ввода, пожалуйста, попробуйте снова.");
+                else System.out.println("Invalid input format, please try again.");
             } while (true);
 
             do {
                 try {
-                    System.out.print("Введите id_Person для выбора Админа группы> ");
+                    System.out.print("Enter id_Person for Admin> ");
                     id = Integer.parseInt(scanner.nextLine());
                     break;
                 } catch (Exception e) {
-                    System.out.println("Неверный формат ввода, пожалуйста, попробуйте снова.");
+                    System.out.println("Invalid input format, please try again.");
                 }
             } while (true);
             do {
-                System.out.print("Введите Координаты x y> ");
+                System.out.print("Enter coordinates x y> ");
                 try {
                     xCor = Double.parseDouble(scanner.nextLine());
                     yCor = Double.parseDouble(scanner.nextLine());
                     break;
                 } catch (Exception e) {
-                    System.out.println("Неверный формат координат, введите заново");
+                    System.out.println("Invalid input format, please try again.");
                 }
             } while (true);
 
-            System.out.print("Введите Количество студентов> ");
+            System.out.print("Enter count of students> ");
             try {
                 int temp = Integer.parseInt(scanner.nextLine());
                 if (temp >= 0) count = temp;
             } catch (Exception e) {
-                System.out.println("Неверный формат, присвоен 0");
+                System.out.println("Invalid input format, assigned 0");
             }
 
-            System.out.print("Введите Количество переведенных студентов> ");
+            System.out.print("Enter count of transferred students> ");
             try {
                 int temp = Integer.parseInt(scanner.nextLine());
                 if (temp >= 0) transfer = temp;
             } catch (Exception e) {
-                System.out.println("Неверный формат, присвоен 0");
+                System.out.println("Invalid input format, assigned 0");
             }
 
-            System.out.print("Введите значение сред. оценки в группе> ");
+            System.out.print("Enter AVG mark> ");
             try {
                 int temp = Integer.parseInt(scanner.nextLine());
                 if (temp >= 0 && temp <= 5) mark = temp;
             } catch (Exception e) {
-                System.out.println("Неверный формат, присвоен 0");
+                System.out.println("Invalid input format, assigned 0");
             }
 
             do {
-                System.out.print("Введите номер семестра> ");
+                System.out.print("Enter semester number> ");
                 try {
                     sem = scanner.nextLine();
                     break;
                 } catch (Exception e) {
-                    System.out.println("Неверный формат координат, введите заново");
+                    System.out.println("Invalid input format, please try again.");
                 }
             } while (true);
             return true;
@@ -111,7 +111,7 @@ public class AddIfMax extends Command {
         List<StudyGroup> list = commandHandler.sortGroups();
         Collections.sort(list);
 
-        if (commandHandler.getGroups().size() == 0 || max > list.get(commandHandler.getGroups().size() - 1).getStudentsCount()) {
+        if (commandHandler.getGroups().size() == 0 || max > list.get(commandHandler.getGroups().size() - 1).getId()) {
             try {
                 try {
                     admin = commandHandler.getPersons().get(id);
@@ -141,19 +141,19 @@ public class AddIfMax extends Command {
                 for (Iterator<StudyGroup> iterator = commandHandler.getGroups().iterator(); iterator.hasNext(); ) {
                     if (max == iterator.next().getId()) {
                         if (dbUnit.addGroupToDB((StudyGroup)iterator)) {
-                            return "Элемент успешно добавлен!";
+                            return "The item was successfully added!";
                         } else {
-                            return "При добавлении элемента возникла ошибка SQL!";
+                            return "When adding an element, an SQL error occurred!";
                         }
                     }
                 }
 
-                return "Элемент добавлен";
+                return "The item was successfully added!";
             } catch (Exception e) {
-                return "Добавление не выполнено";
+                return "The addition was not completed";
             }
         } else {
-            return "Элемент не максимальный";
+            return "The element is not the maximum";
         }
 
     }
@@ -165,7 +165,7 @@ public class AddIfMax extends Command {
 
     @Override
     public String getDescription() {
-        return " {id_StudyGroup} (с которым вы хотите добавить новый элемент) : добавить новый " +
-                "элемент в коллекцию, если его значение превышает значение наибольшего элемента этой коллекции";
+        return " {id_StudyGroup} : add new " +
+                "an element is added to a collection if its value exceeds the value of the largest element of this collection";
     }
 }

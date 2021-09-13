@@ -18,7 +18,7 @@ public class History extends Command {
             }
             return true;
         } else {
-            System.out.println("У history не может быть аргументов");
+            System.out.println("History can't have arguments");
             return false;
         }
     }
@@ -29,6 +29,6 @@ public class History extends Command {
 
     @Override
     public String getDescription() {
-        return " : вывести последние 8 команд (без их аргументов)";
+        return " : output the last 8 commands (without their arguments)";
     }
 }

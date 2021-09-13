@@ -16,7 +16,7 @@ public abstract class Command implements Serializable {
     public abstract boolean validation(CommandHandler commandHandler, String... args);
 
     public String execute(CommandHandler commandHandler, DBUnit dbUnit, String... args) {
-        return "Команда выполнена.";
+        return "The command is executed.";
     }
 
     public abstract String getName();

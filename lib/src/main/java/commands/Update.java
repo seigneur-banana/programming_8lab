@@ -25,75 +25,75 @@ public class Update extends Command {
             try {
                 idUpdate = Integer.parseInt(args[0]);
             } catch (Exception e) {
-                System.out.println("В качестве аргумента не Integer или <0");
+                System.out.println("As an argument, not Integer or <0");
                 return false;
             }
 
             Scanner scanner = new Scanner(System.in);
 
-            System.out.println("Чтобы добавить StudyGroups, введите такие поля, как (Обязательные поля помечены *):" +
-                    "\n1*. Название Name (String)\n2*. id Админа (Person)\n3. Координаты x y " +
-                    "\n4. Кол-во студентов (int).\n5. Перевед-ые студенты (int)\n6. Средн.Оценка (int, знач > 0)" +
-                    "\n7. Номер семестра.");
+            System.out.println("StudyGroups, enter data(Required fields *):" +
+                    "\n1*. Name (String)\n2*. id Admin (Person)\n3. Coordinates x y " +
+                    "\n4. Count of students (int).\n5. Transferred students (int)\n6. Avg mark (int, знач > 0)" +
+                    "\n7. NUM of SEM.");
 
             do {
-                System.out.print("Введите Название> ");
+                System.out.print("Name> ");
                 name = scanner.nextLine();
                 if (!name.equals("")) break;
-                else System.out.println("Неверный формат ввода, пожалуйста, попробуйте снова.");
+                else System.out.println("Invalid input format, please try again.");
             } while (true);
 
             do {
                 try {
-                    System.out.print("Введите id_Person для выбора Админа группы> ");
+                    System.out.print("Enter id_Person for Admin> ");
                     idAdmin = Integer.parseInt(scanner.nextLine());
                     break;
                 } catch (Exception e) {
-                    System.out.println("Неверный формат ввода, пожалуйста, попробуйте снова.");
+                    System.out.println("Invalid input format, please try again.");
                 }
             } while (true);
             do {
-                System.out.print("Введите Координаты x y> ");
+                System.out.print("Enter coordinates x y> ");
                 try {
                     xCor = Double.parseDouble(scanner.nextLine());
                     yCor = Double.parseDouble(scanner.nextLine());
                     break;
                 } catch (Exception e) {
-                    System.out.println("Неверный формат координат, введите заново");
+                    System.out.println("Invalid input format, please try again.");
                 }
             } while (true);
 
-            System.out.print("Введите Количество студентов> ");
+            System.out.print("Enter count of students> ");
             try {
                 int temp = Integer.parseInt(scanner.nextLine());
                 if (temp >= 0) count = temp;
             } catch (Exception e) {
-                System.out.println("Неверный формат, присвоен 0");
+                System.out.println("Invalid input format, assigned 0");
             }
 
-            System.out.print("Введите Количество переведенных студентов> ");
+            System.out.print("Enter count of transferred students> ");
             try {
                 int temp = Integer.parseInt(scanner.nextLine());
                 if (temp >= 0) transfer = temp;
             } catch (Exception e) {
-                System.out.println("Неверный формат, присвоен 0");
+                System.out.println("Invalid input format, assigned 0");
             }
 
-            System.out.print("Введите значение сред. оценки в группе> ");
+            System.out.print("Enter average mark of the group> ");
             try {
                 int temp = Integer.parseInt(scanner.nextLine());
                 if (temp >= 0 && temp <= 5) mark = temp;
             } catch (Exception e) {
-                System.out.println("Неверный формат, присвоен 0");
+                System.out.println("Invalid input format, assigned 0");
             }
 
             do {
-                System.out.print("Введите номер семестра> ");
+                System.out.print("Enter number of semester> ");
                 try {
                     sem = scanner.nextLine();
                     break;
                 } catch (Exception e) {
-                    System.out.println("Неверный формат координат, введите заново");
+                    System.out.println("Invalid input format, please try again.");
                 }
             } while (true);
             return true;
@@ -152,21 +152,21 @@ public class Update extends Command {
                     commandHandler.getGroups().add(tmp);
 
                     if (dbUnit.updateGroupInDB(tmp)) {
-                        System.out.println("Добавлен в БД");
+                        System.out.println("Added to the database");
                     } else {
-                        return "При добавлении элемента возникла ошибка SQL!";
+                        return "When adding an element, an SQL error occurred!";
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return "Ошибка, не обновлен";
+                    return "Error, not updated";
                 }
                 list = commandHandler.sortGroups();
                 Collections.sort(list, new StudyGroup.DateComparator());
                 list.get(commandHandler.getGroups().size() - 1).setId(idUpdate);
-                return "Элемент обновлён";
+                return "The element has been updated";
             }
         }
-        return "С таким id ничего не найдено";
+        return "Nothing was found with this id";
 
     }
 
@@ -177,6 +177,6 @@ public class Update extends Command {
 
     @Override
     public String getDescription() {
-        return " id {element} : обновить значение элемента коллекции, id которого равен заданному";
+        return " id {element} : update the value of a collection element whose id is equal to the specified one";
     }
 }

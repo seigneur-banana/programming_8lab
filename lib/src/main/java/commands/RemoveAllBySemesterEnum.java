@@ -17,11 +17,11 @@ public class RemoveAllBySemesterEnum extends Command {
     public boolean validation(CommandHandler commandHandler, String... args) {
         if (args != null) {
             if (args.length != 1 || args[0].equals("")) {
-                System.out.println("неверное кол-во аргументов");
+                System.out.println("invalid number of arguments");
                 return false;
             } else return true;
         } else {
-            System.out.println("Почему без аргументов?");
+            System.out.println("Why without arguments?");
             return false;
         }
     }
@@ -38,8 +38,8 @@ public class RemoveAllBySemesterEnum extends Command {
                 }
             }
         }
-        if (!result) return "Элемента с таким ID и не было :)";
-        return "Элементы удалёны";
+        if (!result) return "There was no element with this ID :)";
+        return "Elements removed";
     }
 
     @Override
@@ -49,6 +49,6 @@ public class RemoveAllBySemesterEnum extends Command {
 
     @Override
     public String getDescription() {
-        return " semesterEnum : удалить из коллекции все элементы, значение поля semesterEnum которого эквивалентно заданному";
+        return " semesterEnum : remove from the collection all elements whose semesterEnum field value is equivalent to the specified one";
     }
 }

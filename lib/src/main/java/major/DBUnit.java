@@ -27,7 +27,7 @@ public class DBUnit {
         connection = DriverManager.getConnection(url, username, password);
     }
     public void loadCollectionFromDB(HashMap<Integer, Location> locations, HashMap<Integer, Coordinates> coordinates, HashMap<Integer, Person> persons, LinkedHashSet<StudyGroup> collection) {
-        System.out.println("Пытаемся загрузить коллекцию из базы данных...");
+        System.out.println("Trying to load a collection from the database...");
         try {
             PreparedStatement statement = connection.prepareStatement("select * from collections");
             ResultSet result = statement.executeQuery();
@@ -74,9 +74,9 @@ public class DBUnit {
                     collection.add(product);
                 }*/
             }
-            System.out.println("Загружено элементов: " + collection.size() + ".");
+            System.out.println("Elements loaded: " + collection.size() + ".");
         } catch (SQLException e) {
-            System.out.println("При загрузке коллекции из базы данных возникла ошибка SQL: " + e.getMessage());
+            System.out.println("An SQL error occurred when loading the collection from the database: " + e.getMessage());
         }
     }
 
@@ -201,7 +201,7 @@ public class DBUnit {
             statement.close();
             return true;
         } catch (SQLException e) {
-            System.out.println("Ошибка при удалении");
+            System.out.println("Error when deleting");
             return false;
         }
     }
@@ -218,7 +218,7 @@ public class DBUnit {
                 user.setErrorId(2); // Такого пользователя не существует
             }
         } catch (SQLException e) {
-            System.out.println("Оишбка при проверке пользователя");
+            System.out.println("Error when verifying the user");
             user.setErrorId(3); // Ошибка SQL
         }
         return user;
@@ -238,12 +238,12 @@ public class DBUnit {
                     statement.executeUpdate();
                     statement.close();
                 } catch (SQLException e) {
-                    System.out.println("Ошибка при добавлении пользвователя в БД");
+                    System.out.println("Error when adding a user to the database");
                     user.setErrorId(3); // Ошибка SQL
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Ошибка при добавлении пользвователя в БД");
+            System.out.println("Error when adding a user to the database");
             user.setErrorId(3); // Ошибка SQL
         }
         return user;

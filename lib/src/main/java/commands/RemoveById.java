@@ -22,11 +22,11 @@ public class RemoveById extends Command {
                 id = Integer.parseInt(args[0]);
                 return true;
             } catch (Exception e) {
-                System.out.println("В качестве аргумента не Integer или <0");
+                System.out.println("As an argument, not Integer or <0");
                 return false;
             }
         } else {
-            System.out.println("Почему без аргументов?");
+            System.out.println("Why without arguments?");
             return false;
         }
     }
@@ -48,15 +48,15 @@ public class RemoveById extends Command {
             if (user.getName().equals("admin") || optional.get().getUser().getName().equals(user.getName())) {
                 if (dbUnit.removeGroupFromDB(optional.get())) {
                     commandHandler.getGroups().remove(optional.get());
-                    return "Элемент с id " + id + " успешно удалён!";
+                    return "The element with the id "+ id + " has been successfully deleted!";
                 } else {
-                    return "При удалении элемента с id " + id + " произошла ошибка SQL!";
+                    return "When deleting an element с id " + id + " an SQL error has occurred!";
                 }
             } else {
-                return "Вы не являетесь владельцем элемента с id " + id + ", поэтому у вас нет прав на его удаление!";
+                return "You are not the owner of the item с id " + id + ", therefore, you do not have the rights to delete it!";
             }
         } else {
-            return "Удаление невозможно, так как в коллекции нет элемента с id " + id + ".";
+            return "Deletion is not possible, because there is no element in the collection with id " + id + ".";
         }
     }
 
@@ -67,6 +67,6 @@ public class RemoveById extends Command {
 
     @Override
     public String getDescription() {
-        return " id : удалить элемент из коллекции по его id";
+        return " id : delete an item from the collection by its id";
     }
 }

@@ -15,7 +15,7 @@ public class Clear extends Command {
         if (args == null) {
             return true;
         } else {
-            System.out.println("У clear не может быть аргументов");
+            System.out.println("Clear can't have arguments");
             return false;
         }
     }
@@ -23,7 +23,7 @@ public class Clear extends Command {
     @Override
     public synchronized String execute(CommandHandler commandHandler, DBUnit dbUnit, String... args) {
         commandHandler.clearGroups();
-        return "Локальная коллекция StudyGroup очищена . . .";
+        return "Local Collection StudyGroup is clear . . .";
     }
 
     @Override
@@ -33,6 +33,6 @@ public class Clear extends Command {
 
     @Override
     public String getDescription() {
-        return " : очистить коллекцию";
+        return " : clear the collection";
     }
 }

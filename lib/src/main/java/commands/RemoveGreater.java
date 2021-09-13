@@ -21,11 +21,11 @@ public class RemoveGreater extends Command {
                 id = Integer.parseInt(args[0]);
                 return true;
             } catch (Exception e) {
-                System.out.println("В качестве аргумента не Integer или <0");
+                System.out.println("As an argument, not Integer or <0");
                 return false;
             }
         } else {
-            System.out.println("Почему без аргументов?");
+            System.out.println("Why without arguments?");
             return false;
         }
     }
@@ -41,8 +41,8 @@ public class RemoveGreater extends Command {
                 }
             }
         }
-        if (!result) return "Элемента с таким ID и не было :)";
-        return "Элемент удалён";
+        if (!result) return "There was no element with this ID :)";
+        return "The element was deleted";
     }
 
     @Override
@@ -52,6 +52,6 @@ public class RemoveGreater extends Command {
 
     @Override
     public String getDescription() {
-        return " {element} : удалить из коллекции все элементы, превышающие заданный";
+        return " {element} : remove all items from the collection that exceed the specified limit";
     }
 }

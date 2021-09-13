@@ -18,7 +18,7 @@ public class Show extends Command {
         if (args == null) {
             return true;
         } else {
-            System.out.println("У show не может быть аргументов");
+            System.out.println("Show can't have arguments");
             return false;
         }
     }
@@ -26,7 +26,7 @@ public class Show extends Command {
     @Override
     public synchronized String execute(CommandHandler commandHandler, DBUnit dbUnit, String... args) {
         List<StudyGroup> list = commandHandler.sortGroups();
-        if (list.size() == 0) return "Коллекция пуста";
+        if (list.size() == 0) return "Collection is empty";
         else return "StudyGroups: \n" + list.toString();
     }
 
@@ -37,6 +37,6 @@ public class Show extends Command {
 
     @Override
     public String getDescription() {
-        return " : вывести в стандартный поток вывода все элементы коллекции в строковом представлении";
+        return " : output all the elements of the collection in a string representation to the standard output stream";
     }
 }

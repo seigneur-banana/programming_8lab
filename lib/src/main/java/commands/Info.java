@@ -17,16 +17,16 @@ public class Info extends Command {
         if (args == null) {
             return true;
         } else {
-            System.out.println("У info не может быть аргументов");
+            System.out.println("Info can't have arguments");
             return false;
         }
     }
 
     @Override
     public synchronized String execute(CommandHandler commandHandler, DBUnit dbUnit, String... args) {
-        return  "StudyGroup\nДата инициализации " + commandHandler.getGroups().getClass() + " : \n" +
+        return  "StudyGroup\nData initialization " + commandHandler.getGroups().getClass() + " : \n" +
                 new SimpleDateFormat("dd.MM.yyyy k:mm").format(commandHandler.getTime()) +
-                "\nКол-во элементов : " + commandHandler.getGroups().size();
+                "\nCount of elements : " + commandHandler.getGroups().size();
     }
 
     @Override
@@ -36,7 +36,7 @@ public class Info extends Command {
 
     @Override
     public String getDescription() {
-        return " : вывести в стандартный поток вывода информацию о коллекции (тип, дата инициализации, количество элементов и т.д.)";
+        return " : output information about the collection (type, initialization date, number of elements, etc.) to the standard output stream.";
     }
 }
 

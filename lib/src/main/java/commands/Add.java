@@ -20,70 +20,70 @@ public class Add extends Command {
     public boolean validation(CommandHandler commandHandler, String... args) {
         if (args == null) {
             Scanner scanner = new Scanner(System.in);
-            System.out.println("StudyGroups, введите такие поля, как (Обязательные поля помечены *):" +
-                    "\n1*. Название Name (String)\n2*. id Админа (Person)\n3. Координаты x y " +
-                    "\n4. Кол-во студентов (int).\n5. Перевед-ые студенты (int)\n6. Средн.Оценка (int, знач > 0)" +
-                    "\n7. Номер семестра.");
+            System.out.println("StudyGroups, enter data(Required fields *):" +
+                    "\n1*. Name (String)\n2*. id Admin (Person)\n3. Coordinates x y " +
+                    "\n4. Count of students (int).\n5. Transferred students (int)\n6. Avg mark (int, знач > 0)" +
+                    "\n7. NUM of SEM.");
 
             do {
-                System.out.print("Введите Название> ");
+                System.out.print("Name> ");
                 name = scanner.nextLine();
                 if (!name.equals("")) break;
-                else System.out.println("Неверный формат ввода, пожалуйста, попробуйте снова.");
+                else System.out.println("Invalid input format, please try again.");
             } while (true);
 
             do {
                 try {
-                    System.out.print("Введите id_Person для выбора Админа группы> ");
+                    System.out.print("Enter id_Person for Admin> ");
                     id = Integer.parseInt(scanner.nextLine());
                     break;
                 } catch (Exception e) {
-                    System.out.println("Неверный формат ввода, пожалуйста, попробуйте снова.");
+                    System.out.println("Invalid input format, please try again.");
                 }
             } while (true);
             do {
                 try {
-                    System.out.print("Введите Координаты x> ");
+                    System.out.print("Enter coordinate x> ");
                     xCor = Double.parseDouble(scanner.nextLine());
-                    System.out.print("Введите Координаты y> ");
+                    System.out.print("Enter coordinate y> ");
                     yCor = Double.parseDouble(scanner.nextLine());
                     break;
                 } catch (Exception e) {
-                    System.out.println("Неверный формат координат, введите заново");
+                    System.out.println("Invalid input format, please try again");
                 }
             } while (true);
 
-            System.out.print("Введите Количество студентов> ");
+            System.out.print("Enter count of students> ");
             try {
                 int temp = Integer.parseInt(scanner.nextLine());
                 if (temp >= 0) count = temp;
             } catch (Exception e) {
-                System.out.println("Неверный формат, присвоен 0");
+                System.out.println("Invalid input format, assigned 0");
             }
 
-            System.out.print("Введите Количество переведенных студентов> ");
+            System.out.print("Enter count of transferred students> ");
             try {
                 int temp = Integer.parseInt(scanner.nextLine());
                 if (temp >= 0) transfer = temp;
             } catch (Exception e) {
-                System.out.println("Неверный формат, присвоен 0");
+                System.out.println("Invalid input format, assigned 0");
             }
 
-            System.out.print("Введите значение сред. оценки в группе> ");
+            System.out.print("Enter average mark of the group> ");
             try {
                 int temp = Integer.parseInt(scanner.nextLine());
                 if (temp >= 0 && temp <= 5) mark = temp;
             } catch (Exception e) {
-                System.out.println("Неверный формат, присвоен 0");
+                System.out.println("Invalid input format, assigned 0");
             }
 
             do {
-                System.out.print("Введите номер семестра> ");
+                System.out.print("Enter number of semester> ");
                 try {
                     sem = scanner.nextLine();
                     break;
                 } catch (Exception e) {
-                    System.out.println("Неверный формат координат, введите заново");
+                    System.out.println("Invalid input format, please try again");
                 }
             } while (true);
             return true;
@@ -136,13 +136,13 @@ public class Add extends Command {
             commandHandler.getGroups().add(tmp);
 
             if (dbUnit.addGroupToDB(tmp)) {
-                return "Элемент успешно добавлен!";
+                return "The item was successfully added!";
             } else {
-                return "При добавлении элемента возникла ошибка SQL!";
+                return "An SQL error occurred while adding an element!";
             }
 
         } catch (Exception e) {
-            return "Ошибка при добавлении: "+ e.toString();
+            return "Error when adding: "+ e.toString();
         }
     }
 
@@ -153,7 +153,7 @@ public class Add extends Command {
 
     @Override
     public String getDescription() {
-        return " {element} : добавить новый элемент в коллекцию";
+        return " {element} : add new element";
     }
 
     public static int isItIdUnique(CommandHandler commandHandler, Integer id) {
@@ -177,7 +177,7 @@ public class Add extends Command {
             for (Iterator<StudyGroup> iterator = commandHandler.getGroups().iterator(); iterator.hasNext(); )
                 if (idGroup.equals(iterator.next().getId())) match = true;
             if (!match) {
-                System.out.println("Элемента с таким id не было . . .");
+                System.out.println("There was no element with this id . . .");
                 return false;
             }
             commandHandler.getGroups().removeIf(studyGroup -> idGroup.equals(studyGroup.getId()));
@@ -190,28 +190,28 @@ public class Add extends Command {
         try {
             corY = Double.parseDouble(ar.get(1));
         } catch (Exception e) {
-            System.out.println("Ошибка при чтении координаты Y");
+                System.out.println("Error when reading the coordinate Y");
         }
         try {
             corX = Double.parseDouble(ar.get(2));
         } catch (Exception e) {
-            System.out.println("Ошибка при чтении координаты X");
+            System.out.println("Error when reading the coordinate X");
         }
         try {
             if (Integer.parseInt(ar.get(3)) > 0) count = Integer.parseInt(ar.get(3));
         } catch (Exception e) {
-            System.out.println("Ошибка при чтении кол-ва студентов");
+            System.out.println("Error when reading the COUNT of STUDENTS");
         }
         try {
             if (Integer.parseInt(ar.get(4)) > 0) transfer = Integer.parseInt(ar.get(4));
         } catch (Exception e) {
-            System.out.println("Ошибка при чтении кол-ва переведенных сутудентов");
+            System.out.println("Error when reading the COUNT OF TRANSFERRED STUDENTS");
         }
         try {
             if (Integer.parseInt(ar.get(5)) > 0 && Integer.parseInt(ar.get(5)) <= 5)
                 mark = Integer.parseInt(ar.get(5));
         } catch (Exception e) {
-            System.out.println("Ошибка при чтении ср. оценки");
+            System.out.println("Error when reading AVG MARK");
         }
         for (Semester semester : Semester.values()) {
             if (ar.get(6).toLowerCase().equals(semester.name().toLowerCase())) {
@@ -222,7 +222,7 @@ public class Add extends Command {
         try {
             if (Integer.parseInt(ar.get(7)) > 0) id = Integer.parseInt(ar.get(7));
         } catch (Exception e) {
-            System.out.println("Ошибка при чтении id админа");
+            System.out.println("Error when reading the admin id");
         }
         commandHandler.setCoordinates(corY, corX);
         User user1 = new User("admin", "admin");

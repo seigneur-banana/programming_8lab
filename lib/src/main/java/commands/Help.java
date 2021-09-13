@@ -19,7 +19,7 @@ public class Help extends Command{
             return true;
         }
         else {
-            System.out.println("У history не может быть аргументов");
+            System.out.println("Help can't have arguments");
             return false;
         }
     }
@@ -30,6 +30,6 @@ public class Help extends Command{
 
     @Override
     public String getDescription() {
-        return " : вывести справку по доступным командам";
+        return " : display help for available commands";
     }
 }
