@@ -2,12 +2,9 @@ package major;
 
 import appliances.CommandHandler;
 import appliances.ParsedCommand;
-import appliances.Person;
-import appliances.StudyGroup;
 import commands.Command;
 
 import java.util.Date;
-import java.util.LinkedHashSet;
 import java.util.Scanner;
 
 public class CommandHandlerForServer extends CommandHandler {

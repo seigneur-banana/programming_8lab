@@ -28,21 +28,6 @@ public class Main {
     private static java.sql.Connection connection;
 
     public static void main(String[] args) {
-        //check
-        /*try {
-            connection = DriverManager.getConnection("jdbc:postgresql://localhost:8456/studs", "s297537", "pur526");
-            System.out.println("Подключено");
-        }catch (Exception e){
-            e.printStackTrace();
-        }*/
-
-       // ch = new CommandHandler();
-        /*FileParser io = new FileParser();
-        try {
-            io.read(ch);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
         if (setConnectionDetails(args)) {
             date = new Date();
             dbUnit = new DBUnit(url, username, password);
@@ -95,7 +80,7 @@ public class Main {
             }
         }
         else {
-            System.out.println("Programm isn't started");
+            System.out.println("Program isn't started");
         }
     }
     public static boolean setPort(String[] args) {

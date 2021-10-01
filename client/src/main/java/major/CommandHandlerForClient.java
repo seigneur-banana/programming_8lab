@@ -4,43 +4,56 @@ import appliances.CommandHandler;
 import appliances.ParsedCommand;
 import commands.*;
 
-import java.io.InputStream;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.io.InputStream;
 
 public class CommandHandlerForClient extends CommandHandler {
 
     public CommandHandlerForClient(User user) {
         super(user);
     }
-    public void execute(InputStream stream) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Hello world!!! you look beautiful");
-        while (scanner.hasNext()) {
-            try {
-                System.out.print("> ");
-                String str = scanner.nextLine();
 
-                ParsedCommand pc = new ParsedCommand(str);
-                if (pc.getCommand() == null || "".equals(pc.getCommand())) {
-                    continue;
+    public void fromStream(InputStream stream, boolean isInteractive) {
+        Scanner in = new Scanner(stream);
+        while (in.hasNext()) {
+            String s = in.nextLine();
+            if (!s.matches("\\s*")) {
+                String com = "";
+                String arg = "";
+                Matcher m = Pattern.compile("[^\\s]+").matcher(s);
+                if (m.find()) {
+                    com = m.group();
+                    s = m.replaceFirst("");
                 }
-                Command cmd = commands.get(pc.getCommand().toLowerCase());
-
-                if (cmd == null) {
-                    System.out.println("Command not detected, available commands => help");
-                    continue;
-                } else {
-                    if (cmd.validation(this, pc.getArgs())) {
-                        Client.send(cmd);
-                    } else {
-                        System.out.println("Command not detected, available commands => help");
+                m = Pattern.compile("[\\s]+").matcher(s);
+                if (m.find()) {
+                    arg = m.replaceFirst("");
+                }
+                addToHistory(com);
+                ParsedCommand pc = new ParsedCommand(com);
+                Command command = commands.get(pc.getCommand().toLowerCase());
+                if (command != null) {
+                    if (command.validation(this, pc.getArgs())) {
+                        Client.send(command);
                     }
+                } else {
+                    System.out.println("Команды " + com + " не существует! Список команд: help");
                 }
-                addToHistory(str);
-
-            } catch (Exception e) {
-                System.out.println("CommandHandler Exception");
             }
+        }
+    }
+
+    public String fromString(String com, String arg) {
+        addToHistory(com);
+        ParsedCommand pc = new ParsedCommand(com);
+        Command command = commands.get(pc.getCommand().toLowerCase());
+
+        if (command.validation(this, pc.getArgs())) {
+            return Client.send(command);
+        } else {
+            return "";
         }
     }
 }

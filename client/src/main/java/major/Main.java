@@ -1,13 +1,51 @@
 package major;
 
-import appliances.CommandHandler;
-import commands.Show;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.stage.Stage;
 
-public class Main {
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+import static major.WindowManager.*;
+
+
+public class Main extends Application{
+    private static Logger logger;
+    private static String[] args;
+    private static User user;
+    private static CommandHandlerForClient commandHandler;
+    private static ResourceBundle currentBundle;
+
     public static void main(String[] args) {
+        Main.args = args;
+        Application.launch();
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        try {
+            String loggerCfg = "handlers = java.util.logging.FileHandler\n" +
+                    "java.util.logging.FileHandler.level     = ALL\n" +
+                    "java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter\n" +
+                    "java.util.logging.FileHandler.append    = true\n" +
+                    "java.util.logging.FileHandler.pattern   = log.txt";
+            LogManager.getLogManager().readConfiguration(new ByteArrayInputStream(loggerCfg.getBytes()));
+            logger = Logger.getLogger(Main.class.getName());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         if (args.length<2) {
-            System.out.println("The program is not running, because the IP (or hostname) and the server port are not passed!\n" +
-                    "(They must be passed through command-line arguments. IP format: xxx. xxx.xxx. xxx; hostname format: non-empty string; port format: a number from 1 to 65535.)");
+            logger.log(Level.WARNING, getStringFromBundle("cantStartErrorForLog"));
+            showAlert(Alert.AlertType.ERROR, "ERROR", getStringFromBundle("cantStartAlertHeader"), getStringFromBundle("cantStartAlertContent"));
         } else {
             try{
                 int port = Integer.parseInt(args[1]);
@@ -15,16 +53,56 @@ public class Main {
                     throw new NumberFormatException();
                 } else {
                     Client.setProperties(args[0], port);
-                    Client.setUser();
-                    CommandHandlerForClient ch = new CommandHandlerForClient(Client.getUser());
-                    ch.execute(System.in);
+                    Main.setCurrentBundle("ru-RU");
+                    Scene scene = new Scene(FXMLLoader.load(getClass().getResource("/start.fxml")));
+                    primaryStage.setTitle("STUDYGROUP: " + getStringFromBundle("startWindowTitle"));
+                    primaryStage.setResizable(false);
+                    primaryStage.setScene(scene);
+                    setPrimaryStage(primaryStage);
+                    primaryStage.show();
                 }
             }
             catch (NumberFormatException e){
-                System.out.println("The program is not running because the wrong port format is specified!\n" +
-                        "(the number from 1 to 65535 should be passed as the second command line argument)");
+                logger.log(Level.WARNING, getStringFromBundle("wrongPortErrorForLog") + args[1] + "!");
+                showAlert(Alert.AlertType.ERROR, "ERROR", getStringFromBundle("cantStartAlertHeader"), getStringFromBundle("wrongPortAlertContent"));
             }
 
         }
+    }
+
+    public static Logger getLogger() {
+        return logger;
+    }
+
+    public static void setUser(User user) {
+        Main.user = user;
+    }
+
+    public static User getUser() {
+        return user;
+    }
+
+    public static void setInterpreter(CommandHandlerForClient commandHandler) {
+        Main.commandHandler = commandHandler;
+    }
+
+    public static CommandHandlerForClient getCommandHandler() {
+        return commandHandler;
+    }
+
+    public static void setCurrentBundle(String tag) {
+        Main.currentBundle = ResourceBundle.getBundle("bundles.Language", Locale.forLanguageTag(tag));
+    }
+
+    public static String getStringFromBundle(String key) {
+        return new String(currentBundle.getString(key).getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8);
+    }
+
+    public static String getCurrentBundleName() {
+        return currentBundle.getLocale().getLanguage()+"-"+currentBundle.getLocale().getCountry();
+    }
+
+    public static ResourceBundle getCurrentBundle() {
+        return currentBundle;
     }
 }
