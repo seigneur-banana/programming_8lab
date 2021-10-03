@@ -3,6 +3,7 @@ package appliances;
 import major.User;
 
 import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
 import java.util.Comparator;
 import java.util.Date;
 
@@ -33,16 +34,26 @@ public class StudyGroup implements Comparable<StudyGroup> {
 
     @Override
     public String toString() {
-        return " id: " + id +
-                "; name: " + name +
-                "; coordinates: " + coordinates +
-                "; creationDate: " + new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(creationDate) +
-                "; studentsCount: " + studentsCount +
-                "; transferredStudents: " + transferredStudents +
-                "; averageMark: " + averageMark +
-                "; semesterEnum: " + semesterEnum +
-                "; groupAdmin: " + groupAdmin.getName() + "\n" +
-                "; User: " + user.getName() + "\n";
+        return "{" +
+                "\"id\" : " + id + "," +
+                "\"name\" : \"" + name + "\"," +
+                "\"xCoordinate\" : " + coordinates.getX() + "," +
+                "\"yCoordinate\" : " + coordinates.getY() + "," +
+                "\"creationDate\" : \"" + new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(creationDate) + "\"," +
+                "\"count\" : " + studentsCount + "," +
+                "\"transferred\" : " + transferredStudents + "," +
+                "\"avgMark\" : " + averageMark + "," +
+                "\"semester\" : \"" + semesterEnum + "\"," +
+                "\"personName\" : \"" + groupAdmin.getName()+ "\"," +
+                "\"height\" : " + groupAdmin.getHeight()+ "," +
+                "\"eyeColor\" : \"" + groupAdmin.getEyeColor()+ "\"," +
+                "\"hairColor\" : \"" + groupAdmin.getHairColor()+ "\"," +
+                "\"country\" : \"" + groupAdmin.getCountry()+ "\"," +
+                "\"locationName\" : \"" + groupAdmin.getLocation().getName()+ "\"," +
+                "\"locationX\" : " + groupAdmin.getLocation().getX()+ "," +
+                "\"locationY\" : " + groupAdmin.getLocation().getY()+ "," +
+                "\"owner\" : \"" + user.getName() + "\"" +
+                "}";
     }
 
     public Integer getId() {
@@ -72,6 +83,12 @@ public class StudyGroup implements Comparable<StudyGroup> {
     public Coordinates getCoordinates() {
         return coordinates;
     }
+    public Double getX(){
+        return  coordinates.getX();
+    }
+    public Double getY(){
+        return  coordinates.getY();
+    }
 
     public int getStudentsCount() {
         return studentsCount;
@@ -87,6 +104,24 @@ public class StudyGroup implements Comparable<StudyGroup> {
 
     public Person getGroupAdmin() {
         return groupAdmin;
+    }
+    public String getPersonName(){
+        return groupAdmin.getName();
+    }
+    public Integer getPersonHeight(){
+        return groupAdmin.getHeight();
+    }
+    public Color getPersonEyeColor(){
+        return groupAdmin.getEyeColor();
+    }
+    public Color getPersonHairColor(){
+        return groupAdmin.getHairColor();
+    }
+    public Country getPersonCountry(){
+        return groupAdmin.getCountry();
+    }
+    public String getPersonLocation(){
+        return groupAdmin.getLocation().getName();
     }
 
     @Override
@@ -104,8 +139,21 @@ public class StudyGroup implements Comparable<StudyGroup> {
     public User getUser() {
         return user;
     }
+    public String getUserName() {
+        return user.getName();
+    }
 
     public void setUser(User user) {
         this.user = user;
     }
+
+    public static Comparator<StudyGroup> byIdComparator = (p1, p2) -> {
+        if (p1.id.equals(p2.id)) {
+            System.out.println("Что-то пошло не так: у двух продуктов один id!");
+            return 0;
+        }
+        return (p1.id < p2.id) ? -1 : 1;
+    };
+    public static Comparator<StudyGroup> byPriceComparator = (p1, p2) -> Float.compare(p1.studentsCount, p2.studentsCount);
+
 }

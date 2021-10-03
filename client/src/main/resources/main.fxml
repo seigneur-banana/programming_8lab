@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="665.0" prefWidth="1530.0" stylesheets="styles.css" xmlns="http://javafx.com/javafx/8.0.261" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainController">
+    <style>-fx-background-image: url(&#39;/images/bg2.jpg&#39;); -fx-background-position: left; -fx-background-color:
+        #1F2850;
+    </style>
+    <children>
+        <ChoiceBox fx:id="languageChoiceBox" layoutX="211.0" layoutY="32.0" opacity="0.0" prefHeight="31.0" prefWidth="87.0" style="-fx-background-color: transparent;" />
+        <TableView fx:id="tableOfStudyGroups" layoutX="271.0" prefHeight="665.0" prefWidth="1259.0">
+            <columns>
+                <TableColumn fx:id="idColumn" maxWidth="100.0" minWidth="19.0" prefWidth="22.0" text="id" />
+                <TableColumn fx:id="nameColumn" maxWidth="100.0" minWidth="19.0" prefWidth="75.0" text="name" />
+                <TableColumn fx:id="xColumn" maxWidth="100.0" minWidth="19.0" prefWidth="44.0" text="x" />
+                <TableColumn fx:id="yColumn" maxWidth="100.0" minWidth="19.0" prefWidth="44.0" text="y" />
+                <TableColumn fx:id="countColumn" maxWidth="178.0" minWidth="19.0" prefWidth="75.0" text="count" />
+                <TableColumn fx:id="transferredColumn" maxWidth="70.0" minWidth="19.0" prefWidth="75.0" text="transferred" />
+                <TableColumn fx:id="averageMarkColumn" maxWidth="178.0" minWidth="19.0" prefWidth="75.0" text="avgMark" />
+                <TableColumn fx:id="personNameColumn" maxWidth="178.0" minWidth="19.0" prefWidth="107.0" text="personName" />
+                <TableColumn fx:id="personHeightColumn" maxWidth="178.0" minWidth="19.0" prefWidth="85.0" text="height" />
+                <TableColumn fx:id="personEyeColumn" maxWidth="178.0" minWidth="19.0" prefWidth="83.0" text="eyeColor" />
+                <TableColumn fx:id="personHairColumn" maxWidth="178.0" minWidth="19.0" prefWidth="83.0" text="hairColor" />
+                <TableColumn fx:id="countryColumn" maxWidth="178.0" minWidth="19.0" prefWidth="83.0" text="country" />
+                <TableColumn fx:id="personLocationColumn" maxWidth="178.0" minWidth="19.0" prefWidth="83.0" text="location" />
+                <TableColumn fx:id="semesterColumn" maxWidth="100.0" minWidth="19.0" prefWidth="83.0" text="semester" />
+                <TableColumn fx:id="creationDateColumn" maxWidth="119.0" minWidth="19.0" prefWidth="119.0" text="creationDate" />
+                <TableColumn fx:id="ownerColumn" maxWidth="178.0" minWidth="19.0" prefWidth="104.0" text="owner" />
+            </columns>
+        </TableView>
+        <Line fx:id="underlineCommandButton" endX="110.0" layoutX="130.0" layoutY="114.0" startX="-100.0" stroke="WHITE" strokeWidth="3.0" />
+        <AnchorPane fx:id="mainAnchorPane" layoutY="64.0" prefHeight="546.0" prefWidth="271.0" style="-fx-background-color: transparent;">
+            <children>
+                <ChoiceBox fx:id="commandChoiceBox" layoutX="27.0" layoutY="64.0" prefHeight="31.0" prefWidth="215.0" style="-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-border-color: white; -fx-text-fill: white;" styleClass="command-choice-box" />
+                <Button fx:id="commandButton" layoutX="4.0" layoutY="7.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="262.0" style="-fx-background-color: transparent;" text="Выполнить команду" textFill="WHITE">
+                    <font>
+                        <Font name="Consolas Bold" size="23.0" />
+                    </font>
+                </Button>
+                <Label fx:id="commandMirrorLabel" layoutX="38.1" layoutY="68.0" prefHeight="22.0" prefWidth="202.0" textFill="WHITE" />
+                <ChoiceBox fx:id="filterChoiceBox" layoutX="27.0" layoutY="164.0" prefHeight="31.0" prefWidth="215.0" style="-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-border-color: white; -fx-text-fill: white;" styleClass="command-choice-box" />
+                <Button fx:id="filterButton" layoutX="4.0" layoutY="105.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="262.0" style="-fx-background-color: transparent;" text="Применить фильтр" textFill="WHITE">
+                    <font>
+                        <Font name="Consolas Bold" size="23.0" />
+                    </font>
+                </Button>
+                <Label fx:id="filterMirrorLabel" layoutX="38.1" layoutY="168.0" prefHeight="22.0" prefWidth="202.0" textFill="WHITE" />
+                <Line fx:id="underlineFilter" endX="110.0" layoutX="130.0" layoutY="149.0" startX="-100.0" stroke="WHITE" strokeWidth="3.0" />
+                <TextField fx:id="filterField" alignment="CENTER" depthTest="DISABLE" layoutX="27.0" layoutY="210" prefHeight="31.0" prefWidth="215.0" promptText="Условие" style="-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;">
+                    <font>
+                        <Font name="Consolas Bold" size="20.0" />
+                    </font>
+                    <padding>
+                        <Insets bottom="1.0" left="2.0" right="1.0" top="1.0" />
+                    </padding>
+                </TextField>
+                <Button fx:id="mapButton" layoutX="8.0" layoutY="246.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="262.0" style="-fx-background-color: transparent;" text="Карта объектов" textFill="WHITE">
+                    <font>
+                        <Font name="Consolas Bold" size="23.0" />
+                    </font>
+                </Button>
+                <Line fx:id="underlineMapButton" endX="110.0" layoutX="130.0" layoutY="289.0" startX="-100.0" stroke="WHITE" strokeWidth="3.0" />
+            </children>
+        </AnchorPane>
+        <Label layoutX="27.0" layoutY="21.0" prefHeight="54.0" prefWidth="193.0" text="ITMO" textFill="WHITE">
+            <font>
+                <Font name="Consolas Bold" size="47.0" />
+            </font>
+        </Label>
+        <ImageView fx:id="flag" fitHeight="32.5" fitWidth="30.0" layoutX="213.0" layoutY="32.5" pickOnBounds="true" preserveRatio="true" />
+        <AnchorPane fx:id="commandsAnchorPane" layoutY="64.0" prefHeight="545.0" prefWidth="271.0" style="-fx-background-color: transparent;" visible="false">
+            <children>
+                <Label fx:id="chosenCommandLabel" alignment="CENTER" layoutX="27.0" layoutY="10.0" prefHeight="36.0" prefWidth="215.0" style="-fx-background-color: transparent;" textFill="WHITE">
+                    <font>
+                        <Font name="Consolas Bold" size="23.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="idField" alignment="CENTER" depthTest="DISABLE" layoutX="27.0" layoutY="64.0" prefHeight="10.0" prefWidth="215.0" promptText="id" style="-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;">
+                    <font>
+                        <Font name="Consolas Bold" size="20.0" />
+                    </font>
+                    <padding>
+                        <Insets bottom="1.0" left="2.0" right="1.0" top="1.0" />
+                    </padding>
+                </TextField>
+                <TextField fx:id="nameField" alignment="CENTER" depthTest="DISABLE" layoutX="27.0" layoutY="101.0" prefHeight="10.0" prefWidth="215.0" promptText="name" style="-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;">
+                    <font>
+                        <Font name="Consolas Bold" size="20.0" />
+                    </font>
+                    <padding>
+                        <Insets bottom="1.0" left="2.0" right="1.0" top="1.0" />
+                    </padding>
+                </TextField>
+                <TextField alignment="CENTER" depthTest="DISABLE" layoutX="27.0" layoutY="138.0" prefHeight="10.0" prefWidth="215.0" promptText="x" style="-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;" fx:id="xField">
+                    <font>
+                        <Font name="Consolas Bold" size="20.0" />
+                    </font>
+                    <padding>
+                        <Insets bottom="1.0" left="2.0" right="1.0" top="1.0" />
+                    </padding>
+                </TextField>
+                <TextField fx:id="yField" alignment="CENTER" depthTest="DISABLE" layoutX="27.0" layoutY="175.0" prefHeight="10.0" prefWidth="215.0" promptText="y" style="-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;">
+                    <font>
+                        <Font name="Consolas Bold" size="20.0" />
+                    </font>
+                    <padding>
+                        <Insets bottom="1.0" left="2.0" right="1.0" top="1.0" />
+                    </padding>
+                </TextField>
+                <TextField fx:id="countField" alignment="CENTER" depthTest="DISABLE" layoutX="27.0" layoutY="212.0" prefHeight="10.0" prefWidth="215.0" promptText="count" style="-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;">
+                    <font>
+                        <Font name="Consolas Bold" size="20.0" />
+                    </font>
+                    <padding>
+                        <Insets bottom="1.0" left="2.0" right="1.0" top="1.0" />
+                    </padding>
+                </TextField>
+                <TextField fx:id="transferredField" alignment="CENTER" depthTest="DISABLE" layoutX="27.0" layoutY="249.0" prefHeight="10.0" prefWidth="215.0" promptText="transferred" style="-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;">
+                    <font>
+                        <Font name="Consolas Bold" size="20.0" />
+                    </font>
+                    <padding>
+                        <Insets bottom="1.0" left="2.0" right="1.0" top="1.0" />
+                    </padding>
+                </TextField>
+                <TextField fx:id="avgMarkField" alignment="CENTER" depthTest="DISABLE" layoutX="27.0" layoutY="286.0" prefHeight="10.0" prefWidth="215.0" promptText="avgMark" style="-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;">
+                    <font>
+                        <Font name="Consolas Bold" size="20.0" />
+                    </font>
+                    <padding>
+                        <Insets bottom="1.0" left="2.0" right="1.0" top="1.0" />
+                    </padding>
+                </TextField>
+                <TextField fx:id="personNameField" alignment="CENTER" depthTest="DISABLE" layoutX="27.0" layoutY="360.0" prefHeight="10.0" prefWidth="215.0" promptText="personName" style="-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;">
+                    <font>
+                        <Font name="Consolas Bold" size="20.0" />
+                    </font>
+                    <padding>
+                        <Insets bottom="1.0" left="2.0" right="1.0" top="1.0" />
+                    </padding>
+                </TextField>
+                <TextField fx:id="personLocationField" alignment="CENTER" depthTest="DISABLE" layoutX="27.0" layoutY="360.0" prefHeight="10.0" prefWidth="215.0" promptText="personName" style="-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;">
+                    <font>
+                        <Font name="Consolas Bold" size="20.0" />
+                    </font>
+                    <padding>
+                        <Insets bottom="1.0" left="2.0" right="1.0" top="1.0" />
+                    </padding>
+                </TextField>
+                <TextField fx:id="personHeightField" alignment="CENTER" depthTest="DISABLE" layoutX="27.0" layoutY="397.0" prefHeight="10.0" prefWidth="215.0" promptText="height" style="-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;">
+                    <font>
+                        <Font name="Consolas Bold" size="20.0" />
+                    </font>
+                    <padding>
+                        <Insets bottom="1.0" left="2.0" right="1.0" top="1.0" />
+                    </padding>
+                </TextField>
+                <TextField fx:id="personEyeField" alignment="CENTER" depthTest="DISABLE" layoutX="27.0" layoutY="434.0" prefHeight="10.0" prefWidth="215.0" promptText="eyeColor" style="-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;">
+                    <font>
+                        <Font name="Consolas Bold" size="20.0" />
+                    </font>
+                    <padding>
+                        <Insets bottom="1.0" left="2.0" right="1.0" top="1.0" />
+                    </padding>
+                </TextField>
+                <TextField fx:id="personHairField" alignment="CENTER" depthTest="DISABLE" layoutX="27.0" layoutY="434.0" prefHeight="10.0" prefWidth="215.0" promptText="eyeColor" style="-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;">
+                    <font>
+                        <Font name="Consolas Bold" size="20.0" />
+                    </font>
+                    <padding>
+                        <Insets bottom="1.0" left="2.0" right="1.0" top="1.0" />
+                    </padding>
+                </TextField>
+                <TextField fx:id="semesterField" alignment="CENTER" depthTest="DISABLE" layoutX="27.0" layoutY="471.0" prefHeight="10.0" prefWidth="215.0" promptText="semester" style="-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;">
+                    <font>
+                        <Font name="Consolas Bold" size="20.0" />
+                    </font>
+                    <padding>
+                        <Insets bottom="1.0" left="2.0" right="1.0" top="1.0" />
+                    </padding>
+                </TextField>
+                <Button fx:id="proceedButton" layoutX="27.0" layoutY="508.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="215.0" styleClass="blue-button" text="ВЫПОЛНИТЬ" />
+                <Label fx:id="goBackLabel" alignment="CENTER" layoutX="7.0" layoutY="17.0" prefHeight="26.0" prefWidth="20.0" text="⏴" textAlignment="CENTER" textFill="WHITE">
+                    <font>
+                        <Font size="17.0" />
+                    </font>
+                </Label>
+            </children>
+        </AnchorPane>
+        <Label fx:id="userLabel" layoutX="52.0" layoutY="625.0" prefHeight="26.0" prefWidth="117.0" textFill="WHITE">
+            <font>
+                <Font name="Consolas Bold" size="21.0" />
+            </font>
+        </Label>
+        <ImageView fitHeight="22.0" fitWidth="32.0" layoutX="12.0" layoutY="628.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <Image url="@images/users.png"/>
+        </ImageView>
+        <ImageView fx:id="signoutImage" fitHeight="22.0" fitWidth="29.0" layoutX="231.0" layoutY="629.0">
+            <Image url="@images/sing-out.png"/>
+        </ImageView>
+    </children>
+</AnchorPane>

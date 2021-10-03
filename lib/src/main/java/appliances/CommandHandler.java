@@ -13,6 +13,8 @@ public class CommandHandler {
     protected Queue<String> history = new LinkedList<>();
     protected Map<String, Command> commands = new HashMap<>();
     protected Map<Integer, Location> locations = new HashMap<>();
+    protected String tag;
+    protected String content;
 
     protected Map<Integer, Coordinates> coordinates = new HashMap<>();
     protected Map<Integer, Person> persons = new HashMap<>();
@@ -132,4 +134,16 @@ public class CommandHandler {
         return list;
     }
 
+    public void setTag(String tag) {
+        this.tag = tag;
+        commands.forEach((key, value) -> value.setTag(tag));
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public String getContent() {
+        return content;
+    }
 }

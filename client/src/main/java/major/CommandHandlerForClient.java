@@ -1,7 +1,6 @@
 package major;
 
-import appliances.CommandHandler;
-import appliances.ParsedCommand;
+import appliances.*;
 import commands.*;
 
 import java.util.Scanner;
@@ -45,7 +44,7 @@ public class CommandHandlerForClient extends CommandHandler {
         }
     }
 
-    public String fromString(String com, String arg) {
+    public String fromString(String com) {
         addToHistory(com);
         ParsedCommand pc = new ParsedCommand(com);
         Command command = commands.get(pc.getCommand().toLowerCase());
@@ -56,4 +55,6 @@ public class CommandHandlerForClient extends CommandHandler {
             return "";
         }
     }
+
+    //public String fromObjects(Coordinates coor, Location loc, Person pers, StudyGroup group){ }
 }

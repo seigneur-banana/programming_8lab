@@ -21,4 +21,8 @@ public class Coordinates {
     public Double getY() {
         return y;
     }
+
+    public String xToString() {
+        return ""+x;
+    }
 }

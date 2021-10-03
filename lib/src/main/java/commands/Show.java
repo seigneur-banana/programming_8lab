@@ -2,6 +2,7 @@ package commands;
 
 import appliances.CommandHandler;
 import appliances.StudyGroup;
+import com.google.gson.Gson;
 import major.DBUnit;
 import major.User;
 
@@ -25,9 +26,20 @@ public class Show extends Command {
 
     @Override
     public synchronized String execute(CommandHandler commandHandler, DBUnit dbUnit, String... args) {
-        List<StudyGroup> list = commandHandler.sortGroups();
+        /*List<StudyGroup> list = commandHandler.sortGroups();
+        String json = new Gson().toJson(list);
         if (list.size() == 0) return "Collection is empty";
-        else return "StudyGroups: \n" + list.toString();
+        else return json;*/
+
+        if (commandHandler.getGroups().size() > 0) {
+            StringBuilder msg = new StringBuilder();
+            commandHandler.getGroups().stream().min(StudyGroup.byIdComparator).ifPresent(msg::append);
+            commandHandler.getGroups().stream().sorted(StudyGroup.byIdComparator).skip(1).forEach(p -> msg.append(",\n").append(p));
+            return msg.toString();
+        } else {
+            return "0";
+        }
+
     }
 
     @Override

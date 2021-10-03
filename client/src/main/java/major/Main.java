@@ -102,7 +102,7 @@ public class Main extends Application{
         return currentBundle.getLocale().getLanguage()+"-"+currentBundle.getLocale().getCountry();
     }
 
-    public static ResourceBundle getCurrentBundle() {
+    /*public static ResourceBundle getCurrentBundle() {
         return currentBundle;
-    }
+    }*/
 }

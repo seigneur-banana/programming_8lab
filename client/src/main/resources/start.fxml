@@ -39,7 +39,7 @@
                 <Button fx:id="proceedButton" layoutX="22.0" layoutY="289.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="290.0" styleClass="blue-button" text="ВХОД" />
             </children>
         </AnchorPane>
-        <Label layoutX="656.0" layoutY="52.0" text="PRODMAN" textAlignment="CENTER">
+        <Label layoutX="656.0" layoutY="52.0" text="ITMO" textAlignment="CENTER">
             <font>
                 <Font name="Consolas Bold" size="46.0" />
             </font>

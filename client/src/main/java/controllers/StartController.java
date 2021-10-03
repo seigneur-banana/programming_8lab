@@ -1,5 +1,6 @@
 package controllers;
 
+import javafx.scene.input.MouseEvent;
 import major.Client;
 import major.CommandHandlerForClient;
 import major.Main;
@@ -177,10 +178,10 @@ public class StartController extends Controller {
             }
         });
         languageChoiceBox.getSelectionModel().select(getCurrentBundleName());
-        /*languageChoiceBox.setOnAction(event -> {
+        languageChoiceBox.setOnAction(event -> {
             setCurrentBundle(languageChoiceBox.getValue());
             initialize();
-        });*/
+        });
 
         Tooltip.install(flag, getTooltipWithDelay("Change language", 10));
 
@@ -190,9 +191,7 @@ public class StartController extends Controller {
 
         flag.setOnMouseExited(event -> getScene().setCursor(Cursor.DEFAULT));
 
-        flag.setOnMouseClicked(event -> {
-            languageChoiceBox.show();
-        });
+        flag.setOnMouseClicked((MouseEvent event) -> languageChoiceBox.show());
     }
 
     void proceed() {
@@ -226,7 +225,7 @@ public class StartController extends Controller {
                         Main.setUser(user);
                         Main.setInterpreter(new CommandHandlerForClient(user));
                         try {
-                            changeScene("main.fxml", "PRODMAN: " + getStringFromBundle("mainWindowTitle"));
+                            changeScene("main.fxml", "ITMO: " + getStringFromBundle("mainWindowTitle"));
                         } catch (IOException e) {
                             showAlert(Alert.AlertType.ERROR, "ERROR", getStringFromBundle("changeSceneError"), e.getMessage());
                         }

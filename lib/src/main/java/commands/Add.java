@@ -110,17 +110,6 @@ public class Add extends Command {
             }
 
             commandHandler.setCoordinates(yCor, xCor);
-            /*commandHandler.setGroups(
-                    new_id,
-                    name,
-                    commandHandler.getCoordinates().get(commandHandler.getCoordinates().size() - 1),
-                    count,
-                    transfer,
-                    mark,
-                    semestr,
-                    admin,
-                    user
-            );*/
             StudyGroup tmp = new StudyGroup(
                     isItIdUnique(commandHandler, commandHandler.getGroups().size()),
                     name,
