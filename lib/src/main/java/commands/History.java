@@ -1,7 +1,9 @@
 package commands;
 
 import appliances.CommandHandler;
+import major.DBUnit;
 import major.User;
+import org.json.simple.JSONObject;
 
 import java.util.Map;
 
@@ -12,16 +14,19 @@ public class History extends Command {
 
     @Override
     public boolean validation(CommandHandler commandHandler, String... args) {
-        if (args == null) {
-            for (Object object : commandHandler.getHistory()) {
-                System.out.println((String) object);
-            }
-            return true;
-        } else {
-            System.out.println("History can't have arguments");
-            return false;
-        }
+        return true;
     }
+
+    @Override
+    public String execute(CommandHandler commandHandler, DBUnit dbUnit, String... args) {
+        StringBuilder s = new StringBuilder();
+            for (String str : commandHandler.getHistory()) {
+               s.append(str);
+               s.append("\n");
+            }
+            return s.toString();
+    }
+
     @Override
     public String getName() {
         return "history";

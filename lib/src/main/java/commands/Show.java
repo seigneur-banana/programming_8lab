@@ -5,6 +5,7 @@ import appliances.StudyGroup;
 import com.google.gson.Gson;
 import major.DBUnit;
 import major.User;
+import org.json.simple.JSONObject;
 
 import java.util.List;
 

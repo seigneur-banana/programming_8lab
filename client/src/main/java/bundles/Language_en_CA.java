@@ -12,9 +12,6 @@ public class Language_en_CA extends ListResourceBundle {
             {"wrongPortAlertContent", "Unable to launch the app because of invalid port format!\n(a number from 1 to 65535 must be specified via second argument of the command line)"},
 
             //start.fxml
-            {"executeCommand", "Execute command"},
-            {"applyFilter", "Apply a filter"},
-            {"proceed", "PROCEED"},
             {"startWindowTitle", "Sign into app"},
             {"authorisation", "Authorize"},
             {"registration", "Register"},
@@ -32,6 +29,11 @@ public class Language_en_CA extends ListResourceBundle {
             {"userAlreadyExists", "That user is already\nregistered!"},
 
             //main.fxml
+            {"executeCommand", "Execute command"},
+            {"applyFilter", "Apply a filter"},
+            {"proceed", "PROCEED"},
+            {"mapWindowTitle", "Object map"},
+            {"toMap", "To object map"},
             {"chooseCommand", "Choose command"},
             {"chooseField", "Choose field"},
             {"filterAlertHeader", "Filter configuration error"},
@@ -54,14 +56,14 @@ public class Language_en_CA extends ListResourceBundle {
             {"nameError", "Invalid product name input! Can't be an empty string.\n"},
             {"xError", "Invalid x coordinate input! Appropriate format: fractional number.\n"},
             {"yError", "Invalid y coordinate input! Appropriate format: whole number.\n"},
-            {"priceError", "Invalid product price input! Appropriate format: fractional positive number.\n"},
-            {"partNumError", "Invalid part number input! Appropriate format: #xxxxxx, where x - digits.\n"},
-            {"manCostError", "Invalid manufacture cost input! Appropriate format: fractional positive number.\n"},
+            {"priceError", "Invalid! Appropriate format: fractional positive number.\n"},
+            {"partNumError", "Invalid! Appropriate format: #xxxxxx, where x - digits.\n"},
+            {"manCostError", "Invalid! Appropriate format: fractional positive number.\n"},
             {"uomError", "Invalid input of unit of measure! Available input options: "},
-            {"manNameError", "Invalid manufacturer name input! Can't be an empty string.\n"},
-            {"turnoverError", "Invalid input of manufacturer's annual turnover! Appropriate format: empty string or whole positive number.\n"},
-            {"empCountError", "Invalid input of manufacturer's employee count! Appropriate format: empty string or whole positive number.\n"},
-            {"typeError", "Invalid input of manufacturer's type! Available input options: empty string, "},
+            {"manNameError", "Invalid! Can't be an empty string.\n"},
+            {"turnoverError", "Invalid! Appropriate format: empty string or whole positive number.\n"},
+            {"empCountError", "Invalid! Appropriate format: empty string or whole positive number.\n"},
+            {"typeError", "Invalid! Available input options: empty string, "},
             {"stopSessionAlertHeader", "Session is terminated"},
             {"stopSessionAlertContent", "Due to numerous connection errors you are signed out. Try signing in later."},
             {"back", "Back"},
@@ -135,19 +137,6 @@ public class Language_en_CA extends ListResourceBundle {
             {"removeDesc", "Removes element with the specified id from collection."},
             {"removeSyntax", " Syntax: remove_by_id id, where id - whole positive number."},
 
-            //RemoveByUOM.java
-            {"removeUOMError", "Command remove_any_by_unit_of_measure is supposed to have 1 argument out of these: "},
-            {"removeUOMError1", "When removing an element with unitOfMeasure "},
-            {"removeUOMError2", " an SQL-error occurred"},
-            {"removeUOMError3", "We found "},
-            {"removeUOMError4", " elements with unitOfMeasure "},
-            {"removeUOMError5", ", but you don't own any of them, so you can't remove them!"},
-            {"removeUOMError6", "Nothing to remove - there are no elements with unitOfMeasure "},
-            {"removeUOMSuccess1", "One of elements with unitOfMeasure "},
-            {"removeUOMSuccess2", " was successfully removed!"},
-            {"removeUOMDesc", "Removes random element that has specified unitOfMeasure."},
-            {"removeUOMSyntax", " Syntax: remove_any_by_unit_of_measure unitOfMeasure, where unitOfMeasure: "},
-
             //RemoveGreater.java
             {"rgInteractiveError", "Command remove_greater isn't supposed to have any arguments!"},
             {"rgNotInteractiveError", "Command remove_greater is supposed to have 1 argument: JSON-string!"},
@@ -166,17 +155,6 @@ public class Language_en_CA extends ListResourceBundle {
             {"updateError4", ", which is why you can't edit it!"},
             {"updateDesc", "Updates the value of element with the specified id."},
             {"updateSyntax", " Syntax: update id, where id - whole positive number. \n(In scripts - update id {element})"},
-
-            //ExecuteScript.java
-            {"execError", " doesn't exist!"},
-            {"execMsg", "Script named "},
-            {"execSuccess", " is successfully executed!"},
-            {"updateError1", " wasn't executed, because executable file can't be a directory."},
-            {"updateError2", " wasn't executed, because executable file can't be a special file."},
-            {"updateError3", " wasn't executed, because the executable file is closed for reading."},
-            {"updateError4", " wasn't executed, because it calls itself!"},
-            {"execDesc", "Executes a script."},
-            {"execSyntax", " Syntax: execute_script file_name, where file_name - full name of file."},
 
     };
 

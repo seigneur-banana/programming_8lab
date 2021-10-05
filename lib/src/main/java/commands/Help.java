@@ -1,6 +1,8 @@
 package commands;
 import appliances.CommandHandler;
+import major.DBUnit;
 import major.User;
+import org.json.simple.JSONObject;
 
 import java.util.Map;
 
@@ -10,19 +12,21 @@ public class Help extends Command{
     }
 
     @Override
-    public boolean validation(CommandHandler commandHandler, String... args) {
-        if (args == null) {
-            Map<String, Command> commands = commandHandler.getCommands();
-            for (Command cmd : commands.values()) {
-                System.out.println(cmd.getName()  + cmd.getDescription());
-            }
-            return true;
+    public String execute(CommandHandler commandHandler, DBUnit dbUnit, String... args) {
+        Map<String, Command> commands = commandHandler.getCommands();
+        StringBuilder s = new StringBuilder();
+        for (Command cmd : commands.values()) {
+            s.append(cmd.getName()).append(cmd.getDescription());
+            s.append("\n");
         }
-        else {
-            System.out.println("Help can't have arguments");
-            return false;
-        }
+        return s.toString();
     }
+
+    @Override
+    public boolean validation(CommandHandler commandHandler, String... args) {
+            return true;
+    }
+
     @Override
     public String getName() {
         return "help";

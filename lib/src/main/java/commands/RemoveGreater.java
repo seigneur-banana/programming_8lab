@@ -4,11 +4,12 @@ import appliances.CommandHandler;
 import appliances.StudyGroup;
 import major.DBUnit;
 import major.User;
+import org.json.simple.JSONObject;
 
 import java.util.Iterator;
 
 public class RemoveGreater extends Command {
-    private Integer id;
+    private Integer count;
 
     public RemoveGreater(User user) {
         super(user);
@@ -18,7 +19,7 @@ public class RemoveGreater extends Command {
     public boolean validation(CommandHandler commandHandler, String... args) {
         if (args != null) {
             try {
-                id = Integer.parseInt(args[0]);
+                count = Integer.parseInt(args[0]);
                 return true;
             } catch (Exception e) {
                 System.out.println("As an argument, not Integer or <0");
@@ -34,8 +35,9 @@ public class RemoveGreater extends Command {
     public synchronized String execute(CommandHandler commandHandler, DBUnit dbUnit, String... args) {
         boolean result = false;
         for (Iterator<StudyGroup> iterator = commandHandler.getGroups().iterator(); iterator.hasNext(); ) {
-            if (id < iterator.next().getStudentsCount()) {
-                if (dbUnit.removeGroupFromDB((StudyGroup)iterator)) {
+            StudyGroup temp = iterator.next();
+            if (count < temp.getStudentsCount()) {
+                if (dbUnit.removeGroupFromDB(temp)) {
                     iterator.remove();
                     result = true;
                 }

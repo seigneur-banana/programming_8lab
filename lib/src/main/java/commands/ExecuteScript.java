@@ -4,6 +4,7 @@ import appliances.CommandHandler;
 import appliances.ParsedCommand;
 import major.DBUnit;
 import major.User;
+import org.json.simple.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

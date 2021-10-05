@@ -2,6 +2,7 @@ package major;
 
 import appliances.*;
 import commands.*;
+import org.json.simple.JSONObject;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -44,17 +45,14 @@ public class CommandHandlerForClient extends CommandHandler {
         }
     }
 
-    public String fromString(String com) {
+    public String fromString(String com, String arg) {
         addToHistory(com);
-        ParsedCommand pc = new ParsedCommand(com);
-        Command command = commands.get(pc.getCommand().toLowerCase());
+        Command command = commands.get(com);
 
-        if (command.validation(this, pc.getArgs())) {
+        if (command.validation(this, arg)) {
             return Client.send(command);
         } else {
             return "";
         }
     }
-
-    //public String fromObjects(Coordinates coor, Location loc, Person pers, StudyGroup group){ }
 }

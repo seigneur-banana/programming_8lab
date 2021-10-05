@@ -6,16 +6,16 @@ import appliances.Semester;
 import appliances.StudyGroup;
 import major.DBUnit;
 import major.User;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class AddIfMax extends Command {
     private String name, sem;
     private double xCor = 0, yCor = 0;
-    private int count = 0, transfer = 0, mark = 0, id = 0, max;
+    private int count = 0, transfer = 0, mark = 0, id = 0, max = 0;
 
     public AddIfMax(User user) {
         super(user);
@@ -23,7 +23,7 @@ public class AddIfMax extends Command {
 
     @Override
     public boolean validation(CommandHandler commandHandler, String... args) {
-        if (args != null && args.length == 1) {
+        /*if (args != null && args.length == 1) {
             try {
                 max = Integer.parseInt(args[0]);
             } catch (Exception e) {
@@ -100,7 +100,39 @@ public class AddIfMax extends Command {
             } while (true);
             return true;
         }
-        return false;
+        return false;*/
+
+        try{
+            if(args.length == 1){
+                Object obj = new JSONParser().parse(args[0]);
+                JSONObject jo = (JSONObject) obj;
+                if (!jo.isEmpty()) {
+                    name = (String) jo.get("name");
+                    try{
+                        yCor = (double) jo.get("yCoordinate");
+                        xCor = (double) jo.get("xCoordinate");
+                    }
+                    catch (Exception e){e.printStackTrace();}
+                    commandHandler.setCoordinates(yCor, xCor);
+
+                    try{ count = Integer.parseInt(jo.get("count").toString()); }
+                    catch (Exception e){e.printStackTrace();}
+                    try{ transfer = Integer.parseInt(jo.get("transferred").toString()); }
+                    catch (Exception e){e.printStackTrace();}
+                    try{ mark = Integer.parseInt(jo.get("avgMark").toString()); }
+                    catch (Exception e){e.printStackTrace();}
+
+                    sem = (String) jo.get("semester");
+                    id = new Random().nextInt(3);
+                    return true;
+                }
+                else return false;
+            }
+            return false;
+        }catch (ParseException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
@@ -111,7 +143,13 @@ public class AddIfMax extends Command {
         List<StudyGroup> list = commandHandler.sortGroups();
         Collections.sort(list);
 
-        if (commandHandler.getGroups().size() == 0 || max > list.get(commandHandler.getGroups().size() - 1).getId()) {
+        for (StudyGroup temp : commandHandler.getGroups()) {
+            if (temp.getStudentsCount() > max) {
+                max = temp.getStudentsCount();
+            }
+        }
+
+        if (commandHandler.getGroups().size() == 0 || count > max) {
             try {
                 try {
                     admin = commandHandler.getPersons().get(id);
@@ -128,7 +166,7 @@ public class AddIfMax extends Command {
 
                 commandHandler.setCoordinates(yCor, xCor);
                 commandHandler.setGroups(
-                        max,
+                        Add.isItIdUnique(commandHandler, commandHandler.getGroups().size()),
                         name,
                         commandHandler.getCoordinates().get(commandHandler.getCoordinates().size() - 1),
                         count,

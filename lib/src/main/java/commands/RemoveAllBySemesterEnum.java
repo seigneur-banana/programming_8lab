@@ -5,10 +5,12 @@ import appliances.Semester;
 import appliances.StudyGroup;
 import major.DBUnit;
 import major.User;
+import org.json.simple.JSONObject;
 
 import java.util.Iterator;
 
 public class RemoveAllBySemesterEnum extends Command {
+    private String s = "";
     public RemoveAllBySemesterEnum(User user) {
         super(user);
     }
@@ -19,7 +21,10 @@ public class RemoveAllBySemesterEnum extends Command {
             if (args.length != 1 || args[0].equals("")) {
                 System.out.println("invalid number of arguments");
                 return false;
-            } else return true;
+            } else {
+                s = args[0];
+                return true;
+            }
         } else {
             System.out.println("Why without arguments?");
             return false;
@@ -31,8 +36,9 @@ public class RemoveAllBySemesterEnum extends Command {
         boolean result = false;
 
         for (Iterator<StudyGroup> iterator = commandHandler.getGroups().iterator(); iterator.hasNext(); ) {
-            if (args[0].toLowerCase().equals(iterator.next().getSemesterEnum().toString().toLowerCase())) {
-                if (dbUnit.removeGroupFromDB((StudyGroup)iterator)) {
+            StudyGroup temp = iterator.next();
+            if (s.toLowerCase().equals(temp.getSemesterEnum().toString().toLowerCase())) {
+                if (dbUnit.removeGroupFromDB(temp)) {
                     iterator.remove();
                     result = true;
                 }
@@ -44,7 +50,7 @@ public class RemoveAllBySemesterEnum extends Command {
 
     @Override
     public String getName() {
-        return "remove_all_by_semester_enum";
+        return "remove_all_by_semester";
     }
 
     @Override

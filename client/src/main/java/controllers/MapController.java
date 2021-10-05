@@ -1,22 +1,32 @@
 package controllers;
 
+import appliances.Color;
 import appliances.StudyGroup;
-import javafx.animation.FadeTransition;
-import javafx.animation.ParallelTransition;
-import javafx.animation.ScaleTransition;
+import commands.Command;
+import javafx.animation.*;
+import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
+import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextBoundsType;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.io.IOException;
+import java.util.Iterator;
 
+import static javafx.scene.control.Alert.AlertType.INFORMATION;
 import static major.Main.*;
 import static major.WindowManager.*;
 
@@ -29,10 +39,14 @@ public class MapController extends Controller {
     public Circle languageCircle;
 
     @FXML
+    public Circle sir;
+
+    @FXML
     public ImageView flag;
 
     @FXML
     public Label userLabel;
+
 
     @FXML
     public ImageView signoutImage;
@@ -42,11 +56,47 @@ public class MapController extends Controller {
 
     @FXML
     public Pane paneForDrawing;
+    @FXML
+    public AnchorPane anchorPane;
 
     private static ObservableList<StudyGroup> groups;
 
     @FXML
     void initialize() {
+
+        for (StudyGroup group : MainController.observableList1) {
+            Duration duration = Duration.millis(10000);
+            int radius = (int) (Math.random() * 25) + 25;
+            double xy = (Math.random() * 1600) ;
+            double y = (Math.random() * 300) ;
+            Circle circle = new Circle(xy, y, radius);
+
+            paneForDrawing.getChildren().add(circle);
+
+            FadeTransition fadeInTransition = new FadeTransition(Duration.millis(2500), circle);
+            fadeInTransition.setFromValue(0.0);
+            fadeInTransition.setToValue(1.0);
+
+            FadeTransition fadeOutTransition = new FadeTransition(Duration.millis(2500), circle);
+            fadeOutTransition.setFromValue(1.0);
+            fadeOutTransition.setToValue(0.0);
+
+            RotateTransition rotateTransition = new RotateTransition(duration, circle);
+            //Rotate by 200 degree
+            rotateTransition.setByAngle(200);
+            circle.setOnMouseClicked(x -> {
+                String result = getCommandHandler().fromString("remove_by_id", group.getId().toString());
+                showAlert(INFORMATION, "INFO", "Команда удаления отработала, эелмент с id " + group.getId().toString(), result);
+                fadeOutTransition.play();
+                paneForDrawing.getChildren().remove(circle);
+            });
+
+            rotateTransition.play();
+            fadeInTransition.play();
+        }
+
+
+
         ObservableList<String> languages = FXCollections.observableArrayList("en-CA", "ru-RU", "sl-SI", "sq-AL");
         languages.forEach(x -> {
             if (!languageChoiceBox.getItems().contains(x)) {
@@ -112,12 +162,6 @@ public class MapController extends Controller {
             }
         });
 
-        setChangeSizeListeners();
-        paneForDrawing.getChildren().clear();
-
-        for (StudyGroup group : groups) {
-            setupStudyGroup(group);
-        }
     }
 
     private void setChangeSizeListeners() {

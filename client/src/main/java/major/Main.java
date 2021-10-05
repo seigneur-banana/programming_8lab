@@ -98,6 +98,7 @@ public class Main extends Application{
         return new String(currentBundle.getString(key).getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8);
     }
 
+
     public static String getCurrentBundleName() {
         return currentBundle.getLocale().getLanguage()+"-"+currentBundle.getLocale().getCountry();
     }

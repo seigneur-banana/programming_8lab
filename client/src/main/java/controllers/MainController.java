@@ -3,6 +3,7 @@ package controllers;
 import appliances.*;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import commands.Add;
 import commands.Show;
 import major.Client;
 import major.User;
@@ -28,7 +29,10 @@ import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -173,24 +177,8 @@ public class MainController extends Controller {
 
     @FXML
     private TextField avgMarkField;
-
     @FXML
-    private TextField personLocationField;
-
-    @FXML
-    private TextField personNameField;
-
-    @FXML
-    private TextField personHeightField;
-
-    @FXML
-    public TextField personEyeField;
-
-    @FXML
-    public TextField personHairField;
-
-    @FXML
-    public TextField personCountryField;
+    public TextField personIDField;
 
     @FXML
     private TextField semesterField;
@@ -212,6 +200,8 @@ public class MainController extends Controller {
     private boolean collectionIsEmpty;
     private boolean filterIsSet;
     private String filterOperator;
+    private Date date1 = new Date();
+    public static volatile ObservableList<StudyGroup> observableList1 = FXCollections.observableArrayList();;
 
     @FXML
     void initialize() {
@@ -265,12 +255,12 @@ public class MainController extends Controller {
         commandsAndModes.put("add", 2);
         commandsAndModes.put("add_if_max", 2);
         commandsAndModes.put("clear", 0);
-        commandsAndModes.put("execute_script", 0);
+        //commandsAndModes.put("execute_script", 0);
         commandsAndModes.put("history", 0);
         commandsAndModes.put("help", 0);
         commandsAndModes.put("remove_by_id", 0);
-        commandsAndModes.put("remove_any_by_semester", 0);
-        commandsAndModes.put("remove_greater", 2);
+        commandsAndModes.put("remove_all_by_semester", 0);
+        commandsAndModes.put("remove_greater", 0);
         commandsAndModes.put("update", 1);
 
         ObservableList<String> commands = FXCollections.observableArrayList();
@@ -327,14 +317,8 @@ public class MainController extends Controller {
         fields.add("count");
         fields.add("transferred");
         fields.add("avgMark");
-        fields.add("location");
-        fields.add("personName");
-        fields.add("height");
-        fields.add("eyeColor");
-        fields.add("hairColor");
-        fields.add("country");
         fields.add("semester");
-        fields.add("owner");
+        fields.add("personID");
         filterChoiceBox.setItems(fields);
 
         Tooltip.install(filterMirrorLabel, getTooltipWithDelay(getStringFromBundle("chooseField"), 10));
@@ -435,7 +419,7 @@ public class MainController extends Controller {
             itemRemove.setOnAction(event -> {
                 commandChoiceBox.setValue("remove_by_id");
                 commandMirrorLabel.setText("remove_by_id");
-                String result = getCommandHandler().fromString("remove_by_id " + row.getItem().getId().toString());
+                String result = getCommandHandler().fromString("remove_by_id", row.getItem().getId().toString());
                 if (result == null) {
                     showAlert(ERROR, "ERROR", getStringFromBundle("sendErrorAlertHeader"), Client.getContent());
                 } else if (result.isEmpty()) {
@@ -573,42 +557,21 @@ public class MainController extends Controller {
         });
         avgMarkField.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                personLocationField.requestFocus();
+                personIDField.requestFocus();
             } else {
                 avgMarkField.setStyle("-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;");
             }
         });
-        personLocationField.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                personNameField.requestFocus();
-            } else {
-                personLocationField.setStyle("-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;");
-            }
-        });
-        personNameField.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                personLocationField.requestFocus();
-            } else {
-                personNameField.setStyle("-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;");
-            }
-        });
-        personLocationField.setOnKeyPressed(event -> {
+        personIDField.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 semesterField.requestFocus();
             } else {
-                personLocationField.setStyle("-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;");
+                personIDField.setStyle("-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;");
             }
         });
         semesterField.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 semesterField.requestFocus();
-            } else {
-                semesterField.setStyle("-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;");
-            }
-        });
-        semesterField.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                proceedButton.fire();
             } else {
                 semesterField.setStyle("-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;");
             }
@@ -668,7 +631,7 @@ public class MainController extends Controller {
                             break;
                         }
                         try {
-                            sleep(150);
+                            sleep(250);
                         } catch (InterruptedException e) {
                             break;
                         }
@@ -701,17 +664,23 @@ public class MainController extends Controller {
                     idField.setVisible(true);
                 } else if (commandMirrorLabel.getText().equals("remove_by_id")) {
                     idField.setVisible(true);
+                } else if ((commandMirrorLabel.getText().equals("remove_greater"))) {
+                    idField.setPromptText("count");
+                    Tooltip.install(idField, getTooltipWithDelay("count", 10));
+                    idField.setVisible(true);
+                } else if ((commandMirrorLabel.getText().equals("remove_all_by_semester"))) {
+                    idField.setPromptText("semester");
+                    Tooltip.install(idField, getTooltipWithDelay("semester", 10));
+                    idField.setVisible(true);
                 }
+
                 nameField.setVisible(false);
                 xField.setVisible(false);
                 yField.setVisible(false);
                 countField.setVisible(false);
                 transferredField.setVisible(false);
                 avgMarkField.setVisible(false);
-                personLocationField.setVisible(false);
-                personNameField.setVisible(false);
-                personEyeField.setVisible(false);
-                personHairField.setVisible(false);
+                personIDField.setVisible(false);
                 semesterField.setVisible(false);
                 break;
             case 1:
@@ -723,10 +692,7 @@ public class MainController extends Controller {
                 countField.setVisible(true);
                 transferredField.setVisible(true);
                 avgMarkField.setVisible(true);
-                personLocationField.setVisible(true);
-                personNameField.setVisible(true);
-                personEyeField.setVisible(true);
-                personHairField.setVisible(true);
+                personIDField.setVisible(true);
                 semesterField.setVisible(true);
                 break;
         }
@@ -763,24 +729,9 @@ public class MainController extends Controller {
             avgMarkField.setText("");
         }
         try {
-            personLocationField.setText(chosenStudyGroup.getGroupAdmin().getLocation().toString());
+            personIDField.setText(chosenStudyGroup.getGroupAdmin().getName());
         } catch (NullPointerException e) {
-            personLocationField.setText("");
-        }
-        try {
-            personNameField.setText(chosenStudyGroup.getGroupAdmin().getName());
-        } catch (NullPointerException e) {
-            personNameField.setText("");
-        }
-        try {
-            personEyeField.setText(chosenStudyGroup.getGroupAdmin().getEyeColor().toString());
-        } catch (NullPointerException e) {
-            personEyeField.setText("");
-        }
-        try {
-            personHairField.setText(chosenStudyGroup.getGroupAdmin().getHairColor().toString());
-        } catch (NullPointerException e) {
-            personHairField.setText("");
+            personIDField.setText("");
         }
         try {
             semesterField.setText(chosenStudyGroup.getSemesterEnum().toString());
@@ -793,7 +744,16 @@ public class MainController extends Controller {
         String result;
         switch (commandsAndModes.get(commandMirrorLabel.getText())) {
             case 0:
-                result = getCommandHandler().fromString(commandMirrorLabel.getText() + " " + idField.getText());
+                result = getCommandHandler().fromString(commandMirrorLabel.getText(), idField.getText());
+                if (commandMirrorLabel.getText().equals("history")){
+                    StringBuilder s = new StringBuilder();
+                    for (String str : getCommandHandler().getHistory()) {
+                        s.append(str);
+                        s.append("\n");
+                    }
+                    showAlert(INFORMATION, "INFO", getStringFromBundle("command") + " History", s.toString());
+                    break;
+                }
                 if (result == null) {
                     showAlert(ERROR, "ERROR", getStringFromBundle("sendErrorAlertHeader"), Client.getContent());
                 } else if (result.isEmpty()) {
@@ -819,7 +779,7 @@ public class MainController extends Controller {
                         idField.setStyle("-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: #ff2626;");
                         errors.push(getStringFromBundle("idError"));
                     }
-                }
+                } else id = observableList1.size(); //Add.isItIdUnique();
                 String name = nameField.getText();
                 if (name == null || name.matches("\\s*")) {
                     nameField.setStyle("-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: #ff2626;");
@@ -872,76 +832,22 @@ public class MainController extends Controller {
                     avgMarkField.setStyle("-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: #ff2626;");
                     errors.push(getStringFromBundle("manCostError"));
                 }
-                Location location = null;
-                try {
-                    location = magic(personLocationField.getText());
 
-                } catch (IllegalArgumentException e) {
-                    personLocationField.setStyle("-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: #ff2626;");
-                    errors.push(getStringFromBundle("semesterError"));
-                }
-                String personName = personNameField.getText();
-                if (personName == null || personName.matches("\\s*")) {
-                    personNameField.setStyle("-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: #ff2626;");
-                    errors.push(getStringFromBundle("manNameError"));
-                }
-                int height = 0;
+                int personID = 0;
                 try {
-                    if (!personLocationField.getText().isEmpty()) {
-                        height = Integer.parseInt(personLocationField.getText());
-                        if (height <= 0) {
-                            throw new NumberFormatException();
-                        }
+                    personID = Integer.parseInt(personIDField.getText());
+                    if (personID < 0) {
+                        throw new NumberFormatException();
                     }
                 } catch (NumberFormatException e) {
-                    personLocationField.setStyle("-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: #ff2626;");
-                    errors.push(getStringFromBundle("turnoverError"));
-                }
-                
-                
-                appliances.Color eyeColor = null;
-                try {
-                    for (appliances.Color color : appliances.Color.values()) {
-                        if (color.toString().toLowerCase().equals(personEyeField.getText())) {
-                            eyeColor = color;
-                            break;
-                        }
-                    }
-                } catch (NumberFormatException e) {
-                    personEyeField.setStyle("-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: #ff2626;");
-                    errors.push(getStringFromBundle("empCountError"));
+                    personIDField.setStyle("-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: #ff2626;");
+                    errors.push(getStringFromBundle("manCostError"));
                 }
 
-                appliances.Color hairColor = null;
-                try {
-                    for (appliances.Color color : appliances.Color.values()) {
-                        if (color.toString().toLowerCase().equals(personHairField.getText())) {
-                            hairColor = color;
-                            break;
-                        }
-                    }
-                } catch (NumberFormatException e) {
-                    personHairField.setStyle("-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: #ff2626;");
-                    errors.push(getStringFromBundle("empCountError"));
-                }
-
-                appliances.Country country = null;
-                try {
-                    for (appliances.Country country1 : appliances.Country.values()) {
-                        if (country1.toString().toLowerCase().equals(personCountryField.getText())) {
-                            country = country1;
-                            break;
-                        }
-                    }
-                } catch (NumberFormatException e) {
-                    personCountryField.setStyle("-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: #ff2626;");
-                    errors.push(getStringFromBundle("empCountError"));
-                }
-
-                appliances.Semester semester = null;
+                appliances.Semester semester = Semester.FIRST;
                 try {
                     for (appliances.Semester sem : appliances.Semester.values()) {
-                        if (sem.toString().toLowerCase().equals(semesterField.getText())) {
+                        if (sem.toString().toLowerCase().equals(semesterField.getText().toLowerCase())) {
                             semester = sem;
                             break;
                         }
@@ -954,11 +860,11 @@ public class MainController extends Controller {
 
                 if (errors.isEmpty()) {
                     Coordinates coordinates = new Coordinates(y, x);
-                    Person person = new Person(personName, height, eyeColor, hairColor, country, location);
+                    Person person = getCommandHandler().getPersons().get(personID);
                     StudyGroup studyGroup = new StudyGroup(id, name, coordinates, new Date(), count, transferred, avgMark, semester, person, getUser());
 
-                    /*result = getCommandHandler().fromString(Coordinates coordinates, Location location, StudyGroup studyGroup, Person person);
-                    if (result == null) {
+                    result = getCommandHandler().fromString(commandMirrorLabel.getText(), studyGroup.toString());
+                    /*if (result == null) {
                         showAlert(ERROR, "ERROR", getStringFromBundle("sendErrorAlertHeader"), Client.getContent());
                     } else if (result.isEmpty()) {
                         showAlert(ERROR, "ERROR", getStringFromBundle("prepareErrorAlertHeader"), getCommandHandler().getContent());
@@ -986,11 +892,7 @@ public class MainController extends Controller {
         countField.clear();
         transferredField.clear();
         avgMarkField.clear();
-        personLocationField.clear();
-        personNameField.clear();
-        personEyeField.clear();
-        personHairField.clear();
-        personHeightField.clear();
+        personIDField.clear();
         semesterField.clear();
 
         idField.setStyle("-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;");
@@ -1000,11 +902,7 @@ public class MainController extends Controller {
         countField.setStyle("-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;");
         transferredField.setStyle("-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;");
         avgMarkField.setStyle("-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;");
-        personLocationField.setStyle("-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;");
-        personNameField.setStyle("-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;");
-        personEyeField.setStyle("-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;");
-        personHairField.setStyle("-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;");
-        personHeightField.setStyle("-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;");
+        personIDField.setStyle("-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;");
         semesterField.setStyle("-fx-background-color: transparent; -fx-background-image: url('/images/field-bg2.png'); -fx-text-fill: white;");
 
         Tooltip.install(idField, getTooltipWithDelay("id", 10));
@@ -1013,12 +911,8 @@ public class MainController extends Controller {
         Tooltip.install(yField, getTooltipWithDelay("y", 10));
         Tooltip.install(countField, getTooltipWithDelay("count", 10));
         Tooltip.install(transferredField, getTooltipWithDelay("transferred", 10));
-        Tooltip.install(personLocationField, getTooltipWithDelay("location", 10));
+        Tooltip.install(personIDField, getTooltipWithDelay("personID", 10));
         Tooltip.install(avgMarkField, getTooltipWithDelay("avgMark", 10));
-        Tooltip.install(personNameField, getTooltipWithDelay("personName", 10));
-        Tooltip.install(personEyeField, getTooltipWithDelay("eyeColor", 10));
-        Tooltip.install(personHairField, getTooltipWithDelay("hairColor", 10));
-        Tooltip.install(personHeightField, getTooltipWithDelay("height", 10));
         Tooltip.install(semesterField, getTooltipWithDelay("semester", 10));
     }
 
@@ -1130,30 +1024,59 @@ public class MainController extends Controller {
         if (jsonString != null) {
             if (!jsonString.equals("0")) {
                 try {
-                    JSONArray jsonArray = (JSONArray) new JSONParser().parse("["+jsonString+"]");
+                    JSONArray jsonArray = (JSONArray) new JSONParser().parse("[" + jsonString + "]");
                     for (Object element : jsonArray) {
                         try {
                             JSONObject o = (JSONObject) element;
-                            int locY, height, mark, countSt, trans, id; float locX; Date date;
-                            try{ locY = Integer.parseInt(o.get("locationY").toString());
-                            }catch (Exception e){locY = 0;}
-                            try{locX = Float.parseFloat(o.get("locationX").toString());
-                            }catch (Exception e){locX = 0.f;}
-                            try{ height = Integer.parseInt(o.get("height").toString());
-                            }catch (Exception e){height = 0;}
-                            try{ id = Integer.parseInt(o.get("id").toString());
-                            }catch (Exception e){id = 0;}
-                            try{ countSt = Integer.parseInt(o.get("count").toString());
-                            }catch (Exception e){countSt = 0;}
-                            try{ trans = Integer.parseInt(o.get("transferred").toString());
-                            }catch (Exception e){trans = 0;}
-                            try{ mark = Integer.parseInt(o.get("avgMark").toString());
-                            }catch (Exception e){mark = 0;}
-                            try{ date = Date.from(LocalDateTime.from(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm").parse(o.get("creationDate").toString())).atZone(ZoneId.of("GMT+3")).toInstant());
-                            }catch (Exception e){date = new Date();}
+                            int locY, height, mark, countSt, trans, id;
+                            float locX;
+                            Date date = date1;
+                            try {
+                                locY = Integer.parseInt(o.get("locationY").toString());
+                            } catch (Exception e) {
+                                locY = 0;
+                            }
+                            try {
+                                locX = Float.parseFloat(o.get("locationX").toString());
+                            } catch (Exception e) {
+                                locX = 0.f;
+                            }
+                            try {
+                                height = Integer.parseInt(o.get("height").toString());
+                            } catch (Exception e) {
+                                height = 0;
+                            }
+                            try {
+                                id = Integer.parseInt(o.get("id").toString());
+                            } catch (Exception e) {
+                                id = 0;
+                            }
+                            try {
+                                countSt = Integer.parseInt(o.get("count").toString());
+                            } catch (Exception e) {
+                                countSt = 0;
+                            }
+                            try {
+                                trans = Integer.parseInt(o.get("transferred").toString());
+                            } catch (Exception e) {
+                                trans = 0;
+                            }
+                            try {
+                                mark = Integer.parseInt(o.get("avgMark").toString());
+                            } catch (Exception e) {
+                                mark = 0;
+                            }
+                            try {
+                                DateFormat date2 = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+                                String x = o.get("creationDate").toString();
+                                date = date2.parse(o.get("creationDate").toString());
+                            } catch (Exception e) {
+                            }
 
-                            Coordinates coordinate = new Coordinates((Double)o.get("yCoordinate"), (Double)o.get("xCoordinate"));
+                            Coordinates coordinate = new Coordinates((Double) o.get("yCoordinate"), (Double) o.get("xCoordinate"));
+                            getCommandHandler().setCoordinates((Double) o.get("yCoordinate"), (Double) o.get("xCoordinate"));
                             Location location = new Location(locY, locX, o.get("locationName").toString());
+                            getCommandHandler().setLocations(locY, locX, o.get("locationName").toString());
                             Person person = new Person(
                                     o.get("personName").toString(),
                                     height,
@@ -1162,6 +1085,14 @@ public class MainController extends Controller {
                                     new Gson().fromJson(o.get("country").toString(), appliances.Country.class),
                                     location
                             );
+                            getCommandHandler().setPersons(o.get("personName").toString(),
+                                    height,
+                                    new Gson().fromJson(o.get("eyeColor").toString(), appliances.Color.class),
+                                    new Gson().fromJson(o.get("hairColor").toString(), appliances.Color.class),
+                                    new Gson().fromJson(o.get("country").toString(), appliances.Country.class),
+                                    location
+                            );
+                            User user = new User(o.get("owner").toString());
                             StudyGroup StudyGroup = new StudyGroup(
                                     id,
                                     o.get("name").toString(),
@@ -1172,8 +1103,17 @@ public class MainController extends Controller {
                                     mark,
                                     new Gson().fromJson(o.get("semester").toString(), Semester.class),
                                     person,
-                                    new User(o.get("owner").toString())
+                                    user
                             );
+                            getCommandHandler().setGroups(id,
+                                    o.get("name").toString(),
+                                    coordinate,
+                                    countSt,
+                                    trans,
+                                    mark,
+                                    new Gson().fromJson(o.get("semester").toString(), Semester.class),
+                                    person,
+                                    user);
 
                             if (filterIsSet) {
                                 if (matchesFilter(StudyGroup)) {
@@ -1221,23 +1161,8 @@ public class MainController extends Controller {
 
         tableOfStudyGroups.getItems().clear();
         tableOfStudyGroups.getItems().addAll(observableList);
+        observableList1.clear();
+        observableList1.addAll(observableList);
         return 0;
-    }
-
-    private Location magic(String string){
-        float x = 0.f;
-        int y = 0;
-        String[] parts = string.split(" ");
-        try {
-            x = Float.parseFloat(parts[0]);
-        } catch (Exception e) {
-            System.out.println("Error when reading the coordinate X");
-        }
-        try {
-            y = Integer.parseInt(parts[1]);
-        } catch (Exception e) {
-            System.out.println("Error when reading the coordinate X");
-        }
-        return new Location(y, x, parts[2]);
     }
 }

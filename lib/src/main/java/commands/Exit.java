@@ -2,6 +2,7 @@ package commands;
 
 import appliances.CommandHandler;
 import major.User;
+import org.json.simple.JSONObject;
 
 public class Exit extends Command {
     public Exit(User user) {

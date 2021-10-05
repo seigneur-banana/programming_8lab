@@ -4,8 +4,11 @@ import appliances.CommandHandler;
 import appliances.Person;
 import appliances.Semester;
 import appliances.StudyGroup;
+import jdk.nashorn.internal.runtime.ECMAException;
 import major.DBUnit;
 import major.User;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import java.util.*;
 
@@ -22,7 +25,37 @@ public class Update extends Command {
     @Override
     public boolean validation(CommandHandler commandHandler, String... args) {
         if (args != null && args.length == 1) {
-            try {
+            try{
+                Object obj = new JSONParser().parse(args[0]);
+                JSONObject jo = (JSONObject) obj;
+                if (!jo.isEmpty()) {
+                    name = (String) jo.get("name");
+                    try{
+                        yCor = (double) jo.get("yCoordinate");
+                        xCor = (double) jo.get("xCoordinate");
+                    }
+                    catch (Exception e){e.printStackTrace();}
+                    commandHandler.setCoordinates(yCor, xCor);
+
+                    try{ count = Integer.parseInt(jo.get("count").toString()); }
+                    catch (Exception e){e.printStackTrace();}
+                    try{ transfer = Integer.parseInt(jo.get("transferred").toString()); }
+                    catch (Exception e){e.printStackTrace();}
+                    try{ mark = Integer.parseInt(jo.get("avgMark").toString()); }
+                    catch (Exception e){e.printStackTrace();}
+
+                    sem = (String) jo.get("semester");
+                    try{ idUpdate = Integer.parseInt(jo.get("id").toString()); }
+                    catch (Exception e){e.printStackTrace();}
+
+                    return true;
+                }
+                else return false;
+            }catch (Exception e) {e.printStackTrace(); return false;}
+
+        }
+        return false;
+            /*try {
                 idUpdate = Integer.parseInt(args[0]);
             } catch (Exception e) {
                 System.out.println("As an argument, not Integer or <0");
@@ -98,9 +131,8 @@ public class Update extends Command {
             } while (true);
             return true;
         }
-        return false;
+        return false;*/
     }
-
     @Override
     public synchronized String execute(CommandHandler commandHandler, DBUnit dbUnit, String... args) {
         Person admin;
@@ -125,17 +157,6 @@ public class Update extends Command {
                     }
 
                     commandHandler.setCoordinates(yCor, xCor);
-                    /*commandHandler.setGroups(
-                            idUpdate,
-                            name,
-                            commandHandler.getCoordinates().get(commandHandler.getCoordinates().size() - 1),
-                            count,
-                            transfer,
-                            mark,
-                            semestr,
-                            admin,
-                            user
-                    );*/
 
                     StudyGroup tmp = new StudyGroup(
                             idUpdate,

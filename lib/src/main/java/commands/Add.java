@@ -1,11 +1,16 @@
 package commands;
 
 import appliances.*;
+import com.google.gson.JsonArray;
 import major.DBUnit;
 import major.User;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.util.*;
+
+import static java.lang.Double.parseDouble;
 
 public class Add extends Command {
     private String name, sem;
@@ -44,9 +49,9 @@ public class Add extends Command {
             do {
                 try {
                     System.out.print("Enter coordinate x> ");
-                    xCor = Double.parseDouble(scanner.nextLine());
+                    xCor = parseDouble(scanner.nextLine());
                     System.out.print("Enter coordinate y> ");
-                    yCor = Double.parseDouble(scanner.nextLine());
+                    yCor = parseDouble(scanner.nextLine());
                     break;
                 } catch (Exception e) {
                     System.out.println("Invalid input format, please try again");
@@ -88,6 +93,36 @@ public class Add extends Command {
             } while (true);
             return true;
         }
+        try{
+            if(args.length == 1){
+                Object obj = new JSONParser().parse(args[0]);
+                JSONObject jo = (JSONObject) obj;
+                if (!jo.isEmpty()) {
+                    name = (String) jo.get("name");
+                    try{
+                        yCor = (double) jo.get("yCoordinate");
+                        xCor = (double) jo.get("xCoordinate");
+                    }
+                    catch (Exception e){e.printStackTrace();}
+                    commandHandler.setCoordinates(yCor, xCor);
+
+                    try{ count = Integer.parseInt(jo.get("count").toString()); }
+                    catch (Exception e){e.printStackTrace();}
+                    try{ transfer = Integer.parseInt(jo.get("transferred").toString()); }
+                    catch (Exception e){e.printStackTrace();}
+                    try{ mark = Integer.parseInt(jo.get("avgMark").toString()); }
+                    catch (Exception e){e.printStackTrace();}
+
+                    sem = (String) jo.get("semester");
+                    id = new Random().nextInt(3);
+                    return true;
+                }
+                else return false;
+            }
+        }catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         return false;
     }
 
@@ -145,7 +180,7 @@ public class Add extends Command {
         return " {element} : add new element";
     }
 
-    public static int isItIdUnique(CommandHandler commandHandler, Integer id) {
+    public static synchronized int isItIdUnique(CommandHandler commandHandler, Integer id) {
         int result = 0;
         boolean match = false;
         for (Iterator<StudyGroup> iterator = commandHandler.getGroups().iterator(); iterator.hasNext(); ) {
@@ -177,12 +212,12 @@ public class Add extends Command {
         Semester sem = null;
         String name = ar.get(0);
         try {
-            corY = Double.parseDouble(ar.get(1));
+            corY = parseDouble(ar.get(1));
         } catch (Exception e) {
                 System.out.println("Error when reading the coordinate Y");
         }
         try {
-            corX = Double.parseDouble(ar.get(2));
+            corX = parseDouble(ar.get(2));
         } catch (Exception e) {
             System.out.println("Error when reading the coordinate X");
         }

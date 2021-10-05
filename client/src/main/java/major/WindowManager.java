@@ -35,4 +35,10 @@ public class WindowManager {
         primaryStage.setTitle(title);
         primaryStage.show();
     }
+
+    public static void changeScene(String name, String title, boolean choice) throws IOException {
+        primaryStage.setScene(new Scene(FXMLLoader.load(name.getClass().getResource("/" + name))));
+        primaryStage.setTitle(title);
+        primaryStage.show();
+    }
 }
